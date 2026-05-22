@@ -10,6 +10,12 @@
                 <li class="nav-item">
                   <!-- Link--><a class="nav-link active" href="{% url 'store:home' %}">Home</a>
                 </li>
+                <li class="nav-item">
+                  <form class="form-inline" method="get" action="{% url 'store:search' %}">
+                    <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search products..." aria-label="Search">
+                    <button class="btn btn-outline-dark btn-sm" type="submit">Search</button>
+                  </form>
+                </li>
                 <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Categories</a>
                   <div class="dropdown-menu mt-3" aria-labelledby="pagesDropdown">
                     {% if categories_menu %}
@@ -19,7 +25,7 @@
                     {% endif %}
                     <hr>
                     <a class="dropdown-item border-0 transition-link" href="{% url 'store:all-categories' %}">All Categories</a>
-                    
+                  </div>
                 </li>
                 <li class="nav-item">
                   <!-- Link--><a class="nav-link" href="{% url 'store:home' %}">Blog</a>
@@ -28,32 +34,27 @@
                   <!-- Link--><a class="nav-link" href="{% url 'store:home' %}">Contact</a>
                 </li>
               </ul>
-              <ul class="navbar-nav ml-auto"> 
-                {% if request.user.is_authenticated %}           
+              <ul class="navbar-nav ml-auto">
+                {% if request.user.is_authenticated %}
                   <li class="nav-item"><a class="nav-link" href="{% url 'store:cart' %}"> <i class="fas fa-dolly-flatbed mr-1 text-gray"></i>Cart<small class="text-gray">({{cart_items.count}})</small></a></li>
                   <li class="nav-item"><a class="nav-link" href="#"> <i class="far fa-heart mr-1"></i><small class="text-gray"> (0)</small></a></li>
-                  {% comment %} <li class="nav-item"><a class="nav-link" href="#"> <i class="fas fa-user-alt mr-1 text-gray"></i>My Account</a></li> {% endcomment %}
 
-                  <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-alt mr-1 text-gray"></i>My Account</a></a>
-                  
-                  <div class="dropdown-menu mt-3" aria-labelledby="pagesDropdown">
-                    
+                  <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="accountDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-alt mr-1 text-gray"></i>My Account</a>
+                  <div class="dropdown-menu mt-3" aria-labelledby="accountDropdown">
                       <a class="dropdown-item border-0 transition-link" href="{% url 'store:profile' %}">Profile</a>
                       <a class="dropdown-item border-0 transition-link" href="{% url 'store:cart' %}">Cart</a>
                       <a class="dropdown-item border-0 transition-link" href="{% url 'store:orders' %}">Orders</a>
                       <a class="dropdown-item border-0 transition-link" href="{% url 'store:password-change' %}">Change Password</a>
-
                     <hr>
                     <a class="dropdown-item border-0 transition-link" href="{% url 'store:logout' %}">Log Out</a>
-                    
+                  </div>
                 </li>
                 {% else %}
                   <li class="nav-item"><a class="nav-link" href="{% url 'store:login' %}">Login</a></li>
                   <li class="nav-item"><a class="nav-link" href="{% url 'store:register' %}">Create Account</a></li>
-                {% endif %}   
+                {% endif %}
               </ul>
             </div>
           </nav>
         </div>
       </header>
-

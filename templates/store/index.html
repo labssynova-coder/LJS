@@ -76,8 +76,9 @@
                           <li class="list-inline-item m-0 p-0">
                             {% comment %} <a class="btn btn-sm btn-dark" href="{% url 'store:add-to-cart' %}">Add to cart</a> {% endcomment %}
 
-                            <form action="{% url 'store:add-to-cart' %}">
-                              <input type="hidden" name="prod_id" value="{{product.id}}" id="product_id">
+                            <form method="post" action="{% url 'store:add-to-cart' %}">
+                              {% csrf_token %}
+                              <input type="hidden" name="prod_id" value="{{product.id}}">
                               <button type="submit" class="btn btn-sm btn-dark">Add to Cart</button>
                             </form>
 
@@ -85,7 +86,7 @@
                         </ul>
                       </div>
                     </div>
-                    <h6> <a class="reset-anchor" href="detail.html">{{ product.title }}</a></h6>
+                    <h6> <a class="reset-anchor" href="{% url 'store:product-detail' product.slug %}">{{ product.title }}</a></h6>
                     <p class="small text-muted">${{product.price}}</p>
                   </div>
                 </div>

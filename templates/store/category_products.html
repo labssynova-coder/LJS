@@ -30,8 +30,8 @@
               <div class="col-lg-3 order-2 order-lg-1">
                 <h5 class="text-uppercase mb-4">Categories</h5>
 
-                {% if categories %}
-                  {% for cat in categories %}
+                {% if categories_menu %}
+                  {% for cat in categories_menu %}
                     <a href="{% url 'store:category-products' cat.slug %}">
                       <div class="py-2 px-4 {% if category == cat %}bg-dark text-white {% else %}bg-light{% endif %} mb-3">
                         <strong class="small text-uppercase font-weight-bold">{{cat.title}}</strong>
@@ -95,7 +95,7 @@
               <div class="col-lg-9 order-1 order-lg-2 mb-5 mb-lg-0">
                 <div class="row mb-3 align-items-center">
                   <div class="col-lg-6 mb-2 mb-lg-0">
-                    <p class="text-small text-muted mb-0">Showing 1–12 of 53 results</p>
+                    <p class="text-small text-muted mb-0">Showing {{ products.start_index }}–{{ products.end_index }} of {{ products.paginator.count }} results</p>
                   </div>
                   <div class="col-lg-6">
                     <ul class="list-inline d-flex align-items-center justify-content-lg-end mb-0">
@@ -139,8 +139,9 @@
                                 <li class="list-inline-item m-0 p-0">
                                   {% comment %} <a class="btn btn-sm btn-dark" href="{% url 'store:add-to-cart' %}">Add to cart</a> {% endcomment %}
 
-                                  <form action="{% url 'store:add-to-cart' %}">
-                                    <input type="hidden" name="prod_id" value="{{product.id}}" id="product_id">
+                                  <form method="post" action="{% url 'store:add-to-cart' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="prod_id" value="{{product.id}}">
                                     <button type="submit" class="btn btn-sm btn-dark">Add to Cart</button>
                                   </form>
 
@@ -159,15 +160,29 @@
 
                 </div>
                 <!-- PAGINATION-->
-                <nav aria-label="Page navigation example">
+                {% if products.has_other_pages %}
+                <nav aria-label="Page navigation">
                   <ul class="pagination justify-content-center justify-content-lg-end">
-                    <li class="page-item"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                    {% if products.has_previous %}
+                      <li class="page-item"><a class="page-link" href="?page={{ products.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
+                    {% else %}
+                      <li class="page-item disabled"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
+                    {% endif %}
+                    {% for num in products.paginator.page_range %}
+                      {% if products.number == num %}
+                        <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                      {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                      {% endif %}
+                    {% endfor %}
+                    {% if products.has_next %}
+                      <li class="page-item"><a class="page-link" href="?page={{ products.next_page_number }}" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                    {% else %}
+                      <li class="page-item disabled"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+                    {% endif %}
                   </ul>
                 </nav>
+                {% endif %}
               </div>
             </div>
           </div>
