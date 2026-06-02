@@ -1,6 +1,10 @@
 from django.contrib import admin
 from .models import Address, Category, Product, Cart, Order, OrderItem
 
+admin.site.site_header = "Jewelry Shop Administration"
+admin.site.site_title = "Jewelry Shop Admin"
+admin.site.index_title = "Dashboard"
+
 
 class AddressAdmin(admin.ModelAdmin):
     list_display = ('user', 'locality', 'city', 'state')

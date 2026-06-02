@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 
     {% block content %}
 
@@ -10,7 +11,7 @@
           <h1>{{request.user.first_name}} {{request.user.last_name}}</h1>
           <p><strong>Email:</strong> {{request.user.email}}</p>
           <p><strong>Username:</strong> {{request.user.username}}</p>
-          <p><a class="btn btn-primary btn-large" href="{% url 'store:add-address' %}">Add Address »</a> <a class="btn btn-outline-primary btn-large" href="#">My Orders »</a></p>
+          <p><a class="btn btn-primary btn-large" href="{% url 'store:add-address' %}">Add Address »</a> <a class="btn btn-outline-primary btn-large" href="{% url 'store:orders' %}">My Orders »</a></p>
         </div>
 
 
@@ -30,6 +31,7 @@
                             <strong>Locality: </strong>{{address.locality}} <br>
                             <strong>City: </strong>{{address.city}} <br>
                             <strong>State: </strong>{{address.state}} <br>
+                            {% if address.phone %}<strong>Phone: </strong>{{address.phone}} <br>{% endif %}
                         </p>
 
                         <hr>
@@ -62,10 +64,10 @@
                     {% if orders %}
                       {% for order in orders %}
                         <tr>
-                          <td>#{{order.id}}</td>
+                          <td><a href="{% url 'store:order-detail' order.id %}">#{{order.id}}</a></td>
                           <td>{{order.ordered_date|date:"M d, Y"}}</td>
                           <td>{{order.items.count}} item{{order.items.count|pluralize}}</td>
-                          <td>${{order.total_amount}}</td>
+                          <td>${{order.total_amount|intcomma}}</td>
                           <td>{{order.status}}</td>
                         </tr>
                       {% endfor %}

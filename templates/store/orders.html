@@ -14,12 +14,15 @@
                   {% for order in orders %}
                     <div class="card mb-3">
                       <div class="card-header d-flex justify-content-between align-items-center">
-                        <span><strong>Order #{{order.id}}</strong> - {{order.ordered_date|naturaltime}}</span>
+                        <span><strong><a href="{% url 'store:order-detail' order.id %}">Order #{{order.id}}</a></strong> - {{order.ordered_date|naturaltime}}</span>
                         <span>
                           {% if order.status == 'Pending' %}<span class="badge badge-warning">{{order.status}}</span>
+                          {% elif order.status == 'Accepted' %}<span class="badge badge-primary">{{order.status}}</span>
+                          {% elif order.status == 'Packed' %}<span class="badge badge-secondary">{{order.status}}</span>
+                          {% elif order.status == 'On The Way' %}<span class="badge badge-info">{{order.status}}</span>
                           {% elif order.status == 'Delivered' %}<span class="badge badge-success">{{order.status}}</span>
                           {% elif order.status == 'Cancelled' %}<span class="badge badge-danger">{{order.status}}</span>
-                          {% else %}<span class="badge badge-info">{{order.status}}</span>
+                          {% else %}<span class="badge badge-dark">{{order.status}}</span>
                           {% endif %}
                         </span>
                       </div>
@@ -51,8 +54,16 @@
                           </tbody>
                           <tfoot>
                             <tr class="font-weight-bold">
-                              <td colspan="4" class="text-right">Total:</td>
+                              <td colspan="4" class="text-right">Subtotal:</td>
                               <td>${{order.total_amount|intcomma}}</td>
+                            </tr>
+                            <tr>
+                              <td colspan="4" class="text-right">Shipping:</td>
+                              <td>${{shipping_amount|intcomma}}</td>
+                            </tr>
+                            <tr class="font-weight-bold">
+                              <td colspan="4" class="text-right">Total:</td>
+                              <td>${{order.total_amount|add:shipping_amount|intcomma}}</td>
                             </tr>
                           </tfoot>
                         </table>

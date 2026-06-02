@@ -9,8 +9,11 @@ class Address(models.Model):
     locality = models.CharField(max_length=150, verbose_name="Nearest Location")
     city = models.CharField(max_length=150, verbose_name="City")
     state = models.CharField(max_length=150, verbose_name="State")
+    phone = models.CharField(max_length=20, blank=True, default='', verbose_name='Phone Number')
 
     def __str__(self):
+        if self.phone:
+            return f"{self.locality}, {self.city}, {self.state} - {self.phone}"
         return f"{self.locality}, {self.city}, {self.state}"
 
     class Meta:

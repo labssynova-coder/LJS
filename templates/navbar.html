@@ -3,12 +3,13 @@
 <!-- navbar-->
       <header class="header bg-white">
         <div class="container px-0 px-lg-3">
-          <nav class="navbar navbar-expand-lg navbar-light py-3 px-lg-0"><a class="navbar-brand" href="{% url 'store:home' %}"><span class="font-weight-bold text-uppercase text-dark">Jewelry</span></a>
+          <nav class="navbar navbar-expand-lg navbar-light py-3 px-lg-0">
+            <a class="navbar-brand" href="{% url 'store:home' %}"><span class="font-weight-bold text-uppercase text-dark">Jewelry</span></a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                  <!-- Link--><a class="nav-link active" href="{% url 'store:home' %}">Home</a>
+                  <!-- Link--><a class="nav-link" href="{% url 'store:home' %}">Home</a>
                 </li>
                 <li class="nav-item">
                   <form class="form-inline" method="get" action="{% url 'store:search' %}">
@@ -28,16 +29,16 @@
                   </div>
                 </li>
                 <li class="nav-item">
-                  <!-- Link--><a class="nav-link" href="{% url 'store:home' %}">Blog</a>
+                  <!-- Link--><a class="nav-link" href="{% url 'store:shop' %}">Shop</a>
                 </li>
                 <li class="nav-item">
-                  <!-- Link--><a class="nav-link" href="{% url 'store:home' %}">Contact</a>
+                  <!-- Link--><a class="nav-link" href="{% url 'store:contact' %}">Contact</a>
                 </li>
               </ul>
               <ul class="navbar-nav ml-auto">
                 {% if request.user.is_authenticated %}
                   <li class="nav-item"><a class="nav-link" href="{% url 'store:cart' %}"> <i class="fas fa-dolly-flatbed mr-1 text-gray"></i>Cart<small class="text-gray">({{cart_items.count}})</small></a></li>
-                  <li class="nav-item"><a class="nav-link" href="#"> <i class="far fa-heart mr-1"></i><small class="text-gray"> (0)</small></a></li>
+                  <li class="nav-item"><a class="nav-link wishlist-toggle" href="#" title="Wishlist"><i class="far fa-heart mr-1"></i><small class="text-gray"> (0)</small></a></li>
 
                   <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="accountDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-alt mr-1 text-gray"></i>My Account</a>
                   <div class="dropdown-menu mt-3" aria-labelledby="accountDropdown">

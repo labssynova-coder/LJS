@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+    {% block content %}
+
+      <div class="container">
+        <!-- HERO SECTION -->
+        {% url 'store:home' as home_url %}
+        {% url 'store:orders' as orders_url %}
+        {% include 'partials/_hero_breadcrumb.html' with title='Order Details' bc1_url=home_url bc1_label="Home" bc2_url=orders_url bc2_label="Orders" bc3_label="Details" %}
+        <section class="py-5">
+          <div class="row">
+            <!-- ORDER ITEMS -->
+            <div class="col-lg-8">
+              <div class="card border-0 rounded-0 mb-4">
+                <div class="card-header bg-dark text-white text-uppercase small font-weight-bold">
+                  Order #{{ order.id }} — {{ order.ordered_date|date:"N j, Y, P" }}
+                </div>
+                <div class="card-body p-0">
+                  <table class="table table-sm mb-0">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>Product</th>
+                        <th>Image</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Subtotal</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for item in order.items.all %}
+                      <tr>
+                        <td><a href="{% url 'store:product-detail' item.product.slug %}">{{ item.product.title }}</a></td>
+                        <td>
+                          {% if item.product.product_image %}
+                            <img src="{{ item.product.product_image.url }}" alt="{{ item.product.title }}" style="width:50px;">
+                          {% else %}
+                            <span class="text-muted small">No image</span>
+                          {% endif %}
+                        </td>
+                        <td>${{ item.price|intcomma }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>${{ item.subtotal|intcomma }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- ORDER SUMMARY -->
+            <div class="col-lg-4">
+              <div class="card border-0 rounded-0 bg-light p-lg-4">
+                <div class="card-body">
+                  <h5 class="text-uppercase mb-4">Order Summary</h5>
+                  <ul class="list-unstyled mb-0">
+                    <li class="d-flex align-items-center justify-content-between">
+                      <strong class="text-uppercase small font-weight-bold">Order ID</strong>
+                      <span class="small">#{{ order.id }}</span>
+                    </li>
+                    <li class="border-bottom my-2"></li>
+                    <li class="d-flex align-items-center justify-content-between">
+                      <strong class="text-uppercase small font-weight-bold">Date</strong>
+                      <span class="small">{{ order.ordered_date|date:"N j, Y" }}</span>
+                    </li>
+                    <li class="border-bottom my-2"></li>
+                    <li class="d-flex align-items-center justify-content-between">
+                      <strong class="text-uppercase small font-weight-bold">Status</strong>
+                      <span>
+                        {% if order.status == 'Pending' %}<span class="badge badge-warning">{{ order.status }}</span>
+                        {% elif order.status == 'Accepted' %}<span class="badge badge-primary">{{ order.status }}</span>
+                        {% elif order.status == 'Packed' %}<span class="badge badge-secondary">{{ order.status }}</span>
+                        {% elif order.status == 'On The Way' %}<span class="badge badge-info">{{ order.status }}</span>
+                        {% elif order.status == 'Delivered' %}<span class="badge badge-success">{{ order.status }}</span>
+                        {% elif order.status == 'Cancelled' %}<span class="badge badge-danger">{{ order.status }}</span>
+                        {% else %}<span class="badge badge-dark">{{ order.status }}</span>
+                        {% endif %}
+                      </span>
+                    </li>
+                    <li class="border-bottom my-2"></li>
+                    <li class="d-flex align-items-center justify-content-between">
+                      <strong class="text-uppercase small font-weight-bold">Shipping Address</strong>
+                    </li>
+                    <li class="small text-muted mb-2">{{ order.address.locality }}, {{ order.address.city }}, {{ order.address.state }}{% if order.address.phone %}, {{ order.address.phone }}{% endif %}</li>
+                    <li class="border-bottom my-2"></li>
+                    <li class="d-flex align-items-center justify-content-between">
+                      <strong class="text-uppercase small font-weight-bold">Subtotal</strong>
+                      <span class="text-muted small">${{ order.total_amount|intcomma }}</span>
+                    </li>
+                    <li class="d-flex align-items-center justify-content-between">
+                      <strong class="text-uppercase small font-weight-bold">Shipping</strong>
+                      <span class="text-muted small">+ ${{ shipping_amount|intcomma }}</span>
+                    </li>
+                    <li class="border-bottom my-2"></li>
+                    <li class="d-flex align-items-center justify-content-between">
+                      <strong class="text-uppercase small font-weight-bold">Total</strong>
+                      <span>${{ total_amount|intcomma }}</span>
+                    </li>
+                  </ul>
+                  <a href="{% url 'store:orders' %}" class="btn btn-outline-dark btn-sm mt-4 btn-block">
+                    <i class="fas fa-long-arrow-alt-left mr-2"></i>Back to Orders
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+{% endblock content %}

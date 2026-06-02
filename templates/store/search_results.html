@@ -1,25 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 
     {% block content %}
       <div class="container">
-        <section class="py-5 bg-light">
-          <div class="container">
-            <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
-              <div class="col-lg-6">
-                <h1 class="h2 text-uppercase mb-0">Search Results</h1>
-              </div>
-              <div class="col-lg-6 text-lg-right">
-                <nav aria-label="breadcrumb">
-                  <ol class="breadcrumb justify-content-lg-end mb-0 px-0">
-                    <li class="breadcrumb-item"><a href="{% url 'store:home' %}">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Search</li>
-                  </ol>
-                </nav>
-              </div>
-            </div>
-          </div>
-        </section>
+        {% url 'store:home' as home_url %}
+        {% include 'partials/_hero_breadcrumb.html' with title="Search Results" bc1_url=home_url bc1_label="Home" bc2_label="Search" %}
 
         <section class="py-5">
           {% if query %}
@@ -35,20 +21,16 @@
                   <div class="product text-center">
                     <div class="position-relative mb-3">
                       <a class="d-block" href="{% url 'store:product-detail' product.slug %}">
-                        {% if product.product_image %}
-                          <img class="img-fluid w-100" src="{{ product.product_image.url }}" alt="{{ product.title }}">
-                        {% else %}
-                          <img class="img-fluid w-100" src="{% static 'img/product-1.jpg' %}" alt="{{ product.title }}">
-                        {% endif %}
+                        {% include 'partials/_product_image.html' with product=product %}
                       </a>
                       <div class="product-overlay">
                         <ul class="mb-0 list-inline">
-                          <li class="list-inline-item m-0 p-0"><form method="post" action="{% url 'store:add-to-cart' %}" style="display:inline">{% csrf_token %}<input type="hidden" name="prod_id" value="{{ product.id }}"><button type="submit" class="btn btn-sm btn-dark">Add to Cart</button></form></li>
+                          <li class="list-inline-item m-0 p-0">{% include 'partials/_add_to_cart_btn.html' with product=product %}</li>
                         </ul>
                       </div>
                     </div>
                     <h6><a class="reset-anchor" href="{% url 'store:product-detail' product.slug %}">{{ product.title }}</a></h6>
-                    <p class="small text-muted">${{ product.price }}</p>
+                    <p class="small text-muted">${{ product.price|intcomma }}</p>
                   </div>
                 </div>
               {% endfor %}

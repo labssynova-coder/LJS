@@ -27,6 +27,7 @@ ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').sp
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -145,6 +146,58 @@ if not DEBUG:
     SECURE_HSTS_PRELOAD = True
     X_FRAME_OPTIONS = 'DENY'
 
+# Security settings (apply in all environments)
+CSRF_COOKIE_HTTPONLY = True
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+SESSION_COOKIE_AGE = 86400 * 14  # 14 days
+
+HANDLER404 = 'store.views.page_not_found'
+HANDLER500 = 'store.views.server_error'
+
 LOGIN_URL = 'store:login'
 
 DEFAULT_SHIPPING_FEE = Decimal('10')
+
+# Jazzmin Admin Configuration
+JAZZMIN_SETTINGS = {
+    # Title of the site
+    "site_title": "Jewelry Shop Admin",
+    # Title on the login page
+    "site_header": "Jewelry Shop",
+    # Title on the brand (top left)
+    "site_brand": "JewelryShop",
+    # Logo for the site (use a static file path)
+    "site_logo": None,
+    # CSS for the login page (override the default jazzmin login CSS)
+    "login_logo": None,
+    # Login page background
+    "login_background": None,
+    # CSS to inject into all admin pages
+    "custom_css": None,
+    # CSS file for the login page
+    "login_custom_css": None,
+    # Icons for each model
+    "icons": {
+        "auth.User": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "store.Category": "fas fa-gem",
+        "store.Product": "fas fa-ring",
+        "store.Cart": "fas fa-shopping-cart",
+        "store.Order": "fas fa-receipt",
+        "store.OrderItem": "fas fa-list-ol",
+        "store.Address": "fas fa-map-marker-alt",
+    },
+    # Default icon for models not listed above
+    "default_icon": "fas fa-box",
+    # Order of the apps in the sidebar
+    "order_with_respect_to": ["store", "auth"],
+    # Whether to show the UI customizer on the admin page
+    "show_ui_builder": False,
+}
+
+# Jazzmin UI Tweaks (separate setting per jazzmin convention)
+JAZZMIN_UI_TWEAKS = {
+    "theme": "darkly",
+    "sidebar": "sidebar-dark-primary",
+    "navbar": "navbar-dark",
+}

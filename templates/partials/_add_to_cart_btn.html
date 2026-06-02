@@ -1,0 +1,6 @@
+{% load static %}
+<form method="post" action="{% url 'store:add-to-cart' %}" style="display:inline">
+  {% csrf_token %}
+  <input type="hidden" name="prod_id" value="{{ product.id }}">
+  <button type="submit" class="{% if btn_class %}{{ btn_class }}{% else %}btn btn-sm btn-dark{% endif %}">Add to Cart</button>
+</form>

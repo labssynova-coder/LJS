@@ -14,16 +14,26 @@ from .forms import RegistrationForm, AddressForm
 
 
 def home(request):
-    products = Product.objects.filter(is_active=True, is_featured=True).select_related('category')[:8]
+    products = Product.objects.filter(is_active=True).select_related('category')[:8]
+    featured_products = Product.objects.filter(is_active=True, is_featured=True).select_related('category')[:4]
+    categories = Category.objects.filter(is_active=True, is_featured=True).only('title', 'slug', 'category_image')
+    if not categories.exists():
+        categories = Category.objects.filter(is_active=True).only('title', 'slug', 'category_image')
     context = {
         'products': products,
+        'featured_products': featured_products,
+        'categories': categories,
     }
     return render(request, 'store/index.html', context)
 
 
+def contact(request):
+    return render(request, 'store/contact.html')
+
+
 def detail(request, slug):
-    product = get_object_or_404(Product.objects.select_related('category'), slug=slug)
-    related_products = Product.objects.exclude(id=product.id).filter(is_active=True, category=product.category)
+    product = get_object_or_404(Product.objects.select_related('category'), slug=slug, is_active=True)
+    related_products = Product.objects.exclude(id=product.id).filter(is_active=True, category=product.category)[:4]
     context = {
         'product': product,
         'related_products': related_products,
@@ -175,14 +185,31 @@ def minus_cart(request, cart_id):
     return redirect('store:cart')
 
 
-@require_POST
 @login_required
 def checkout(request):
     user = request.user
-    address_id = request.POST.get('address')
-
-    address = get_object_or_404(Address, id=address_id, user=request.user)
     cart_items = Cart.objects.filter(user=user).select_related('product')
+
+    if request.method == 'GET':
+        if not cart_items.exists():
+            messages.error(request, "Your cart is empty.")
+            return redirect('store:cart')
+        amount = sum(item.product.price * item.quantity for item in cart_items)
+        shipping_amount = getattr(settings, 'DEFAULT_SHIPPING_FEE', 10)
+        total_amount = amount + shipping_amount
+        addresses = Address.objects.filter(user=user)
+        context = {
+            'cart_items': cart_items,
+            'amount': amount,
+            'shipping_amount': shipping_amount,
+            'total_amount': total_amount,
+            'addresses': addresses,
+        }
+        return render(request, 'store/checkout.html', context)
+
+    # POST — process the order
+    address_id = request.POST.get('address')
+    address = get_object_or_404(Address, id=address_id, user=request.user)
     if not cart_items.exists():
         messages.error(request, "Your cart is empty.")
         return redirect('store:cart')
@@ -200,7 +227,6 @@ def checkout(request):
         ])
         cart_items.delete()
         order.calculate_total()
-    # TODO: Verify payment with provider (PayPal/Stripe) before creating orders
     messages.success(request, "Order placed successfully!")
     return redirect('store:orders')
 
@@ -208,7 +234,28 @@ def checkout(request):
 @login_required
 def orders(request):
     all_orders = Order.objects.filter(user=request.user).prefetch_related('items__product').order_by('-ordered_date')
-    return render(request, 'store/orders.html', {'orders': all_orders})
+    shipping_amount = getattr(settings, 'DEFAULT_SHIPPING_FEE', 10)
+    return render(request, 'store/orders.html', {'orders': all_orders, 'shipping_amount': shipping_amount})
+
+
+@login_required
+def order_detail(request, order_id):
+    """Show details of a specific order."""
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    shipping_amount = getattr(settings, 'DEFAULT_SHIPPING_FEE', 10)
+    return render(request, 'store/order_detail.html', {
+        'order': order,
+        'shipping_amount': shipping_amount,
+        'total_amount': order.total_amount + shipping_amount,
+    })
+
+
+def page_not_found(request, exception):
+    return render(request, '404.html', status=404)
+
+
+def server_error(request):
+    return render(request, '500.html', status=500)
 
 
 def shop(request):

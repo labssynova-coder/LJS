@@ -1,1 +1,375 @@
-/* your styles go here */
+/* ============================================
+   JEWELRY STORE — CUSTOM RESPONSIVE STYLES
+   ============================================ */
+
+/* --- NAVBAR: Fix brand overlapping nav links --- */
+@media (min-width: 992px) {
+  .navbar-brand {
+    position: static !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+  }
+  .navbar-nav {
+    margin-left: 0.5rem;
+  }
+}
+
+/* --- WISHLIST HEART TOGGLE --- */
+.wishlist-toggle i.far.fa-heart {
+  transition: all 0.3s ease;
+}
+.wishlist-toggle.active i.far.fa-heart {
+  color: #dc3545;
+  font-weight: 900;
+}
+.wishlist-toggle.active i.far.fa-heart:before {
+  content: "\f004";
+  font-weight: 900;
+  color: #dc3545;
+}
+
+/* --- ABOUT & CONTACT SECTIONS (footer anchors) --- */
+#about-us, #contact-us {
+  scroll-margin-top: 80px;
+}
+
+/* --- BASE ENHANCEMENTS --- */
+
+/* Smooth scrolling for the whole page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Responsive layout transitions — prevents jarring breakpoint jumps */
+.container,
+.container-fluid,
+.row,
+.col,
+[class*="col-"] {
+  transition: padding 0.3s ease, margin 0.3s ease, max-width 0.3s ease;
+}
+
+/* Cards and grid items transition smoothly on resize */
+.card,
+.product,
+.category-item {
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+              padding 0.3s ease, margin 0.3s ease;
+}
+
+/* Better touch target sizing */
+button, a.btn {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Product card spacing and hover lift */
+.product {
+  padding: 1rem 0;
+}
+.product:hover {
+  transform: translateY(-4px);
+}
+
+/* --- PRODUCT OVERLAY: TOUCH SUPPORT --- */
+/* On mobile, show the overlay by default since there's no hover */
+@media (max-width: 991.98px) {
+  .product-overlay {
+    opacity: 1 !important;
+    position: relative !important;
+    bottom: auto !important;
+    left: auto !important;
+    padding: 0.5rem 0 !important;
+    background: white !important;
+    border-top: 1px solid #eee;
+  }
+  .product-overlay ul li {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .product-overlay ul {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 0.5rem;
+  }
+}
+
+/* --- HERO SECTION --- */
+/* Hero carousel styles */
+.hero-carousel {
+  position: relative;
+}
+.hero-slide img {
+  width: 100%;
+  height: 28rem;
+  object-fit: cover;
+  object-position: center;
+}
+.hero-slide-content {
+  z-index: 10;
+}
+@media (max-width: 767.98px) {
+  .hero-slide img {
+    height: 18rem;
+  }
+  .hero-slide-content {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    margin-top: -4rem;
+  }
+  .hero-slide-content > div {
+    margin: 0 1rem;
+  }
+}
+/* Owl carousel nav/dots for hero */
+.hero-carousel .owl-nav {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  transform: translateY(-50%);
+  margin: 0;
+}
+.hero-carousel .owl-nav .owl-prev,
+.hero-carousel .owl-nav .owl-next {
+  position: absolute;
+  background: rgba(255,255,255,0.8) !important;
+  color: #111 !important;
+  width: 40px;
+  height: 40px;
+  border-radius: 0 !important;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.hero-carousel .owl-nav .owl-prev { left: 10px; }
+.hero-carousel .owl-nav .owl-next { right: 10px; }
+.hero-carousel .owl-nav .owl-prev:hover,
+.hero-carousel .owl-nav .owl-next:hover {
+  background: #dcb14a !important;
+  color: #111 !important;
+}
+.hero-carousel .owl-dots {
+  position: absolute;
+  bottom: 15px;
+  width: 100%;
+  text-align: center;
+}
+.hero-carousel .owl-dots .owl-dot span {
+  background: rgba(255,255,255,0.6);
+  width: 10px;
+  height: 10px;
+  margin: 0 4px;
+}
+.hero-carousel .owl-dots .owl-dot.active span {
+  background: #dcb14a;
+}
+
+/* Scale hero height for mobile */
+.hero {
+  min-height: 18rem;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  transition: min-height 0.3s ease;
+}
+@media (min-width: 576px) {
+  .hero { min-height: 22rem; }
+}
+@media (min-width: 768px) {
+  .hero { min-height: 26rem; }
+}
+@media (min-width: 992px) {
+  .hero { min-height: 30rem; }
+}
+
+/* Hero text readability on any background */
+.hero .container .row .col-lg-6 {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 2rem;
+  border-radius: 0;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+@media (min-width: 992px) {
+  .hero .container .row .col-lg-6 {
+    background: rgba(255, 255, 255, 0.75);
+  }
+}
+
+/* --- CATEGORY SECTION --- */
+/* Let original style.default.css handle .category-item img grayscale and hover */
+@media (max-width: 575.98px) {
+  .category-item-title {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+  }
+}
+
+/* --- NAVBAR MOBILE --- */
+@media (max-width: 991.98px) {
+  .navbar .form-inline {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+  .navbar .form-inline .form-control {
+    width: 65%;
+  }
+  .navbar .form-inline .btn {
+    width: 30%;
+  }
+  /* Stack the search bar nicely */
+  .navbar-collapse {
+    padding-bottom: 0.5rem;
+  }
+}
+
+/* --- PRODUCT GRID --- */
+/* Original style.default.css handles .product img grayscale, hover opacity, and overlay */
+
+/* --- PRODUCT DETAIL PAGE --- */
+@media (max-width: 767.98px) {
+  /* Quantity selector and add-to-cart stack vertically */
+  .product-detail-qty-row {
+    flex-direction: column;
+  }
+}
+
+/* --- CART TABLE RESPONSIVE --- */
+@media (max-width: 767.98px) {
+  .table-responsive {
+    font-size: 0.85rem;
+  }
+  .table img {
+    width: 50px !important;
+  }
+}
+
+/* --- PAGE HOLDER (prevents footer from floating) --- */
+.page-holder {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.page-holder > footer {
+  margin-top: auto;
+}
+
+/* --- FOOTER --- */
+@media (max-width: 575.98px) {
+  footer .col-md-4 {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* --- ANIMATIONS & DYNAMIC FEEL --- */
+/* Fade-in animation for page content */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apply subtle fade-in to sections */
+section {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+/* Link transition smoothness */
+a {
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+/* Button active state feedback */
+.btn:active {
+  transform: scale(0.97);
+  transition: transform 0.1s;
+}
+
+/* Breadcrumb section spacing on mobile */
+section.py-5.bg-light {
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
+}
+@media (min-width: 992px) {
+  section.py-5.bg-light {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+}
+
+/* --- SHOP SIDEBAR ON MOBILE --- */
+@media (max-width: 991.98px) {
+  /* Make sidebar stack below products on shop page */
+  .col-lg-3.order-2.order-lg-1 {
+    order: 2 !important;
+    margin-top: 2rem;
+    border-top: 1px solid #eee;
+    padding-top: 1.5rem;
+  }
+}
+
+/* --- SEARCH RESULTS --- */
+@media (max-width: 575.98px) {
+  h1, .h2 {
+    font-size: 1.3rem;
+  }
+}
+
+/* --- ADD TO CART BUTTON FEEDBACK --- */
+.product-overlay form button.btn-dark:hover,
+.product-overlay form button.btn-dark:active {
+  background-color: #dcb14a;
+  border-color: #dcb14a;
+  color: #111;
+}
+
+/* --- NEWSLETTER SECTION --- */
+@media (max-width: 575.98px) {
+  .input-group {
+    flex-direction: column;
+  }
+  .input-group .form-control {
+    border-radius: 0;
+    width: 100%;
+  }
+  .input-group .btn {
+    border-radius: 0;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+}
+
+/* --- PAGINATION TOUCH TARGETS --- */
+.page-link {
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- MESSAGES / ALERTS --- */
+.alert {
+  border-radius: 0;
+}
+
+/* Focus visible for accessibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid #dcb14a;
+  outline-offset: 2px;
+}
