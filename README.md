@@ -8,16 +8,9 @@ A modern, elegant e-commerce website for jewelry built with **Django 4.2**, feat
 
 ## 🌐 Live Demo
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/labssynova-coder/LJS)
+[**🛍️ View Storefront Demo**](https://labssynova-coder.github.io/LJS/) — static showcase with all screenshots
 
-Click the button above to deploy your own instance on Render (free tier). Once deployed, you'll get:
-
-| Demo | Path | Credentials |
-|------|------|-------------|
-| 🛍️ **Storefront** | `https://your-app.onrender.com/` | Browse freely |
-| ⚙️ **Admin Panel** | `https://your-app.onrender.com/admin/` | `admin` / `admin123` |
-
-> ⚠️ Render free tier sleeps after inactivity — first visit may take ~30s to wake up.
+[**⚙️ View Admin Panel**](https://labssynova-coder.github.io/LJS/) — same page, scroll to admin section
 
 ---
 
@@ -89,38 +82,38 @@ The golden accent (`#dcb14a`) is applied to:
     <td align="center"><b>Shop</b></td>
   </tr>
   <tr>
-    <td><img src="screenshots/01-homepage.png" width="480"></td>
-    <td><img src="screenshots/02-shop.png" width="480"></td>
+    <td><img src="docs/demo/01-homepage.png" width="480"></td>
+    <td><img src="docs/demo/02-shop.png" width="480"></td>
   </tr>
   <tr>
     <td align="center"><b>Categories</b></td>
     <td align="center"><b>Product Detail</b></td>
   </tr>
   <tr>
-    <td><img src="screenshots/03-categories.png" width="480"></td>
-    <td><img src="screenshots/04-product-detail.png" width="480"></td>
+    <td><img src="docs/demo/03-categories.png" width="480"></td>
+    <td><img src="docs/demo/04-product-detail.png" width="480"></td>
   </tr>
   <tr>
     <td align="center"><b>Login</b></td>
     <td align="center"><b>Register</b></td>
   </tr>
   <tr>
-    <td><img src="screenshots/05-login.png" width="480"></td>
-    <td><img src="screenshots/06-register.png" width="480"></td>
+    <td><img src="docs/demo/05-login.png" width="480"></td>
+    <td><img src="docs/demo/06-register.png" width="480"></td>
   </tr>
   <tr>
     <td align="center"><b>Search Results</b></td>
     <td align="center"><b>Category Products</b></td>
   </tr>
   <tr>
-    <td><img src="screenshots/07-search.png" width="480"></td>
-    <td><img src="screenshots/08-category-products.png" width="480"></td>
+    <td><img src="docs/demo/07-search.png" width="480"></td>
+    <td><img src="docs/demo/08-category-products.png" width="480"></td>
   </tr>
   <tr>
     <td align="center" colspan="2"><b>Shopping Cart</b></td>
   </tr>
   <tr>
-    <td colspan="2" align="center"><img src="screenshots/09-cart.png" width="480"></td>
+    <td colspan="2" align="center"><img src="docs/demo/09-cart.png" width="480"></td>
   </tr>
 </table>
 
@@ -132,16 +125,16 @@ The golden accent (`#dcb14a`) is applied to:
     <td align="center"><b>Products</b></td>
   </tr>
   <tr>
-    <td><img src="screenshots/09-admin-dashboard.png" width="480"></td>
-    <td><img src="screenshots/10-admin-products.png" width="480"></td>
+    <td><img src="docs/demo/10-admin-dashboard.png" width="480"></td>
+    <td><img src="docs/demo/11-admin-products.png" width="480"></td>
   </tr>
   <tr>
     <td align="center"><b>Categories</b></td>
     <td align="center"><b>Orders</b></td>
   </tr>
   <tr>
-    <td><img src="screenshots/11-admin-categories.png" width="480"></td>
-    <td><img src="screenshots/12-admin-orders.png" width="480"></td>
+    <td><img src="docs/demo/12-admin-categories.png" width="480"></td>
+    <td><img src="docs/demo/13-admin-orders.png" width="480"></td>
   </tr>
 </table>
 
@@ -215,7 +208,9 @@ LJS/
 │   ├── store/            # index, shop, detail, cart, checkout, orders, search
 │   ├── account/          # register, login, profile, address, password reset
 │   └── partials/         # _hero_breadcrumb, _add_to_cart_btn, _product_image
-├── screenshots/          # App screenshots for README
+├── docs/demo/            # Screenshots for README
+├── public/               # GitHub Pages static demo
+├── .github/workflows/    # GitHub Pages deployment
 ├── media/                # User-uploaded images (gitignored)
 ├── .env.example
 ├── requirements.txt
@@ -243,16 +238,18 @@ python manage.py test store -v 2
 
 ---
 
-## 🚢 Deploy to Render
+## 🚢 Deployment
 
-This project is ready to deploy on [Render](https://render.com):
+### GitHub Pages (Demo)
+The `public/` directory contains a static showcase page. Pushing to `main` automatically deploys it via GitHub Actions to `https://labssynova-coder.github.io/LJS/`.
 
-1. Fork or clone this repo
-2. Create a new **Web Service** on Render
-3. Set **Build Command**: `pip install -r requirements.txt && python manage.py migrate && python manage.py loaddata store/fixtures/demo_data.json`
-4. Set **Start Command**: `gunicorn jewelryshop.wsgi:application`
-5. Add environment variable `DJANGO_SECRET_KEY`
-6. Set `DJANGO_DEBUG=False` for production
+### Render / Railway (Production)
+For a live Django deployment:
+```bash
+pip install gunicorn
+gunicorn jewelryshop.wsgi:application
+```
+Set environment variables: `DJANGO_SECRET_KEY`, `DJANGO_DEBUG=False`, `DJANGO_ALLOWED_HOSTS=yourdomain.com`
 
 ---
 

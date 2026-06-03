@@ -17,9 +17,10 @@ static/
 node_modules/
 package-lock.json
 
-# Screenshot scripts (dev only)
+# Dev scripts
 take_*screenshot*.mjs
 take_*screenshot*.js
+freeze_demo.py
 
 # IDE / OS
 .DS_Store
