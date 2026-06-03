@@ -68,7 +68,7 @@
                         {% if product.product_image %}
                           <img class="img-fluid w-100" src="{{ product.product_image.url }}" alt="{{product.title}}">
                         {% else %}
-                          <img class="img-fluid w-100" src="{% static 'img/product-1.jpg' %}" alt="{{product.title}}">
+                          <img class="img-fluid w-100" src="{% static 'img/product-placeholder.jpg' %}" alt="{{product.title}}">
                         {% endif %}
                       </a>
 
@@ -76,7 +76,6 @@
                         <ul class="mb-0 list-inline">
                           <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#"><i class="far fa-heart"></i></a></li>
                           <li class="list-inline-item m-0 p-0">
-                            {% comment %} <a class="btn btn-sm btn-dark" href="{% url 'store:add-to-cart' %}">Add to cart</a> {% endcomment %}
 
                             <form method="post" action="{% url 'store:add-to-cart' %}">
                               {% csrf_token %}

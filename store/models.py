@@ -141,8 +141,13 @@ class OrderItem(models.Model):
         verbose_name_plural = 'Order Items'
 
     def __str__(self):
-        return f"{self.product.title} x {self.quantity}"
+        try:
+            return f"{self.product.title} x {self.quantity}"
+        except Exception:
+            return f"OrderItem #{self.pk} x {self.quantity}"
 
     @property
     def subtotal(self):
+        if self.price is None:
+            return Decimal('0.00')
         return self.price * self.quantity

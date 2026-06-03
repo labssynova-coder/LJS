@@ -44,7 +44,15 @@ class CartAdmin(admin.ModelAdmin):
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
     extra = 0
-    readonly_fields = ('product', 'quantity', 'price', 'subtotal')
+    readonly_fields = ('quantity', 'price', 'subtotal', 'product_display')
+    fields = ('quantity', 'price', 'subtotal', 'product_display')
+
+    def product_display(self, obj):
+        try:
+            return str(obj.product)
+        except Exception:
+            return f"[Deleted product #{obj.product_id}]"
+    product_display.short_description = "Product"
 
 
 class OrderAdmin(admin.ModelAdmin):

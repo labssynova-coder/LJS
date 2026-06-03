@@ -4,8 +4,25 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from store.models import Address, Category, Product, Cart, Order, OrderItem, OrderStatus
+
+
+def _tiny_jpeg(name='test.jpg'):
+    """Return a minimal valid JPEG SimpleUploadedFile for test products."""
+    return SimpleUploadedFile(
+        name,
+        b'\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01\x01\x00\x00\x01\x00\x01\x00\x00'
+        b'\xff\xdb\x00C\x00\x03\x02\x02\x03\x02\x02\x03\x03\x03\x03\x04\x03'
+        b'\x03\x04\x05\x08\x05\x05\x04\x04\x05\n\x07\x07\x06\x08\x0c\n\x0c'
+        b'\x0c\x0c\x0b\n\x0c\x0c\x0e\x0f\x0e\x0c\x0f\x0b\x0b\x0e\x11\x11\x0f'
+        b'\x11\x0e\x10\x10\x11\xff\xc0\x00\x0b\x08\x00\x01\x00\x01\x01\x01'
+        b'\x11\x00\xff\xc4\x00\x14\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00'
+        b'\x00\x00\x00\x00\x00\x00\x00\n\xff\xda\x00\x08\x01\x01\x00\x00?'
+        b'\x00\x7f\xff\xd9',
+        content_type='image/jpeg',
+    )
 
 
 class ModelTests(TestCase):
@@ -448,6 +465,7 @@ class ViewTests(TestCase):
             price=Decimal('59.99'),
             category=cls.category,
             is_active=True,
+            product_image=_tiny_jpeg(),
         )
         cls.inactive_product = Product.objects.create(
             title='Hidden Earrings',
@@ -666,6 +684,7 @@ class SearchViewTests(TestCase):
             price=Decimal('79.99'),
             category=cls.category,
             is_active=True,
+            product_image=_tiny_jpeg(),
         )
         cls.product_necklace = Product.objects.create(
             title='Gold Necklace',
@@ -675,6 +694,7 @@ class SearchViewTests(TestCase):
             price=Decimal('199.99'),
             category=cls.category,
             is_active=True,
+            product_image=_tiny_jpeg(),
         )
 
     def test_search_with_query(self):
@@ -719,6 +739,7 @@ class InactiveProductTests(TestCase):
             price=Decimal('299.99'),
             category=cls.category,
             is_active=True,
+            product_image=_tiny_jpeg(),
         )
         cls.inactive_product = Product.objects.create(
             title='Inactive Watch',
