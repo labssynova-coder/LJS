@@ -280,10 +280,19 @@ const FALLBACK_CATEGORIES = [
   { id: 7, title: "Gifts", slug: "gifts", image: "assets/images/categories/gifts.jpg" }
 ];
 
-/* ---- Demo mode detection ---- */
-let DEMO_MODE = true;
+/* ---- Static hosting detection ---- */
+const IS_STATIC_HOST =
+  window.location.hostname.endsWith('.github.io') ||
+  window.location.protocol === 'file:' ||
+  (window.location.port === '' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1');
+
+let DEMO_MODE = IS_STATIC_HOST;
 
 async function detectDemoMode() {
+  if (IS_STATIC_HOST) {
+    DEMO_MODE = true;
+    return true;
+  }
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 2000);
@@ -298,6 +307,7 @@ async function detectDemoMode() {
 
 /* ---- Data loaders ---- */
 async function loadProducts() {
+  if (IS_STATIC_HOST) return FALLBACK_PRODUCTS;
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 3000);
@@ -312,6 +322,7 @@ async function loadProducts() {
 }
 
 async function loadCategories() {
+  if (IS_STATIC_HOST) return FALLBACK_CATEGORIES;
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 3000);

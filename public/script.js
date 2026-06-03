@@ -500,29 +500,38 @@ document.addEventListener("click", function (e) {
 
 /* ---- Initialize ---- */
 async function initApp() {
-  /* Show demo banner if in demo mode */
-  var banner = document.getElementById("demo-banner");
-  if (banner) banner.style.display = "block";
+  try {
+    /* Show demo banner if in demo mode */
+    var banner = document.getElementById("demo-banner");
+    if (banner) banner.style.display = "block";
 
-  /* Load data */
-  await detectDemoMode();
-  var products = await loadProducts();
-  window._products = products;
+    /* Load data */
+    await detectDemoMode();
+    var products = await loadProducts();
+    window._products = products;
 
-  /* Remove loading state */
-  var loader = document.getElementById("app-loader");
-  if (loader) loader.style.display = "none";
+    /* Remove loading state */
+    var loader = document.getElementById("app-loader");
+    if (loader) loader.style.display = "none";
 
-  /* Update cart badge */
-  updateCartUI();
+    /* Update cart badge */
+    updateCartUI();
 
-  /* Route */
-  route();
-  window.addEventListener("hashchange", route);
+    /* Route */
+    route();
+    window.addEventListener("hashchange", route);
 
-  /* Search form */
-  var searchForm = document.getElementById("search-form");
-  if (searchForm) searchForm.addEventListener("submit", handleSearch);
+    /* Search form */
+    var searchForm = document.getElementById("search-form");
+    if (searchForm) searchForm.addEventListener("submit", handleSearch);
+  } catch (err) {
+    console.error("initApp failed:", err);
+    /* Force-remove loading state so the page isn't stuck */
+    var loader = document.getElementById("app-loader");
+    if (loader) loader.style.display = "none";
+    var app = document.getElementById("app-content");
+    if (app) app.innerHTML = '<div class="container py-5 text-center"><h2>Something went wrong</h2><p class="text-muted">Unable to load products. Please refresh the page.</p><a href="#/" class="btn btn-dark mt-3">Try Again</a></div>';
+  }
 }
 
 document.addEventListener("DOMContentLoaded", initApp);

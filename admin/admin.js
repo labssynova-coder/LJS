@@ -76,11 +76,24 @@ let isAuthenticated = false;
 let currentRoute = '';
 
 
+// ---- Static hosting detection ----
+var IS_STATIC_HOST =
+  window.location.hostname.endsWith('.github.io') ||
+  window.location.protocol === 'file:' ||
+  (window.location.port === '' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1');
+
 // ---- Demo Detection ----
 function detectDemoMode() {
+  if (IS_STATIC_HOST) {
+    enableDemoMode();
+    return;
+  }
   // Try to reach the real backend; if unreachable, enable demo mode
-  fetch('/api/health', { method: 'GET', signal: AbortSignal.timeout(2000) })
+  var controller = new AbortController();
+  var timeout = setTimeout(function () { controller.abort(); }, 2000);
+  fetch('/api/health', { method: 'GET', signal: controller.signal })
     .then(function (res) {
+      clearTimeout(timeout);
       if (res.ok) {
         DEMO_MODE = false;
       } else {
@@ -88,6 +101,7 @@ function detectDemoMode() {
       }
     })
     .catch(function () {
+      clearTimeout(timeout);
       enableDemoMode();
     });
 }

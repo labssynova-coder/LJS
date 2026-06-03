@@ -25,8 +25,9 @@ jobs:
 
       - name: Assemble site
         run: |
-          mkdir -p _site/demo
+          mkdir -p _site/demo _site/admin
           cp -r public/* _site/
+          cp -r admin/* _site/admin/
           cp -r docs/demo/* _site/demo/
 
       - name: Setup Pages
