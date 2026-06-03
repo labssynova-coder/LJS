@@ -1,11 +1,29 @@
+# Python
 db.sqlite3
-media/
-.env
 __pycache__/
 *.pyc
-static/
 *.pyo
-.DS_Store
 *.egg-info/
 dist/
 build/
+.venv/
+
+# Django
+media/
+static/
+.env
+
+# Node
+node_modules/
+package-lock.json
+
+# Screenshots (generated)
+screenshots/
+
+# IDE / OS
+.DS_Store
+.vscode/
+.idea/
+
+# Claude Code
+.claude/

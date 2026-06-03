@@ -1,154 +1,192 @@
-# Django Simple E-Commerce Website with Payment
-This is a simple e-commerce website built with Django (Python) and PayPal is added as payment processor.
+# 💎 Django Jewelry Shop
 
-I've made this as a "Jewelry Shop" website but you can make any website you like.
+A modern, elegant e-commerce website for jewelry built with **Django 4.2**, featuring a white/black/golden theme, a polished admin panel, and a complete storefront experience.
 
+> Fork of [vijaythapa333/django-jewelry-shop](https://github.com/vijaythapa333/django-jewelry-shop) — reimagined with security hardening, UI/UX overhaul, and a cohesive golden theme across storefront and admin.
 
-[Project Demo on YouTube](https://www.youtube.com/watch?v=7IQwbIYfkNI "Django Simple E-Commerce Website")
+---
 
+## ✨ Features
 
-And if you like this project then ADD a STAR ⭐️  to this project 👆
+### Storefront
+- **Responsive design** — mobile-first Bootstrap 4 layout with golden accent theme
+- **Product catalog** — browse by category, search, or view all products
+- **Product detail pages** — image lightbox, descriptions, reviews, related products
+- **Shopping cart** — add/remove items, quantity controls, shipping calculation
+- **User accounts** — register, login, profile management, address book, order history
+- **Search** — real-time product search with pagination
 
-## Features of this Project
+### Admin Panel (Jazzmin)
+- **Dark navy sidebar** with golden accent theme matching the storefront
+- **Dashboard** — at-a-glance stats with recent actions timeline
+- **Category management** — inline editing, search, filters
+- **Product management** — inline editing, image uploads, category filters
+- **Order management** — inline order items, status updates
+- **Cart viewer** — see what's in users' carts
 
-### A. Admin Users Can
-1. Manage Category (Add, Update, Filter and Delete)
-2. Manage Products (Add, Update, Filter and Delete)
-3. Manage Users (Update, Filter and Delete)
-4. Manage Orders (View and Process)
+### Security & Quality
+- **POST + CSRF** for add-to-cart (not GET — prevents CSRF attacks)
+- **`|intcomma`** price formatting (prevents injection via template)
+- **Image-less products excluded** from storefront (no broken placeholder images)
+- **Safe OrderItem handling** — no crash on deleted product references
+- **62 passing tests** covering models, views, cart flow, checkout, and search
 
-### B. Non-Registered Users Can
-1. View Products (Can filter based on category)
-2. Explore Product Details and Related Products
+---
 
+## 🎨 Theme
 
-### C. Registered Users Can Can
-1. All ot Non-Registered Users
-2. Add to Cart
-3. Pay with PayPal or Debit/Credit Card and Order
-4. See the Order Status
-5. See Order History
-6. Update Profile 
-7. Change Password
-8. Reset Password
+| Element | Color |
+|---------|-------|
+| Primary dark | `#212529` |
+| Golden accent | `#dcb14a` |
+| Background | `#ffffff` / `#f8f9fa` |
+| Muted text | `#6c757d` |
 
+The golden accent (`#dcb14a`) is applied to:
+- Button hovers (btn-dark → gold)
+- Form focus borders
+- Pagination active states
+- Card header borders
+- Hero section accents
+- Admin sidebar highlights
 
-## Support Developer
-1. Subscribe & Share my YouTube Channel - https://bit.ly/vijay-thapa-online-courses
-2. Add a Star 🌟  to this 👆 Repository
+---
 
+## 🛠️ Tech Stack
 
-## Donate
+| Layer | Technology |
+|-------|-----------|
+| Backend | Django 4.2 (Python 3.12) |
+| Database | SQLite 3 (dev) |
+| Frontend | Bootstrap 4, jQuery, Owl Carousel, Lightbox2, noUiSlider |
+| Admin | django-jazzmin with AdminLTE theme |
+| Fonts | Libre Franklin, Martel Sans |
 
-**[PayPal](https://bit.ly/support-vijay-thapa)**
+---
 
-**[Buy me a Coffee  ☕️](https://www.buymeacoffee.com/vijaythapa)**
+## 📸 Screenshots
 
-**Donate by wire transfer:** E-Mail at *donate@vijaythapa.com* for wire transfer details. 
+### Homepage
+![Homepage](screenshots/01-homepage.png)
 
+### Shop Page
+![Shop](screenshots/02-shop.png)
 
-## How to Install and Run this project?
+### Categories
+![Categories](screenshots/03-categories.png)
 
-### Pre-Requisites:
-1. Install Git Version Control
-[ https://git-scm.com/ ]
+### Product Detail
+![Product Detail](screenshots/07-product-detail.png)
 
-2. Install Python Latest Version
-[ https://www.python.org/downloads/ ]
+### Login
+![Login](screenshots/05-login.png)
 
-3. Install Pip (Package Manager)
-[ https://pip.pypa.io/en/stable/installing/ ]
+### Cart
+![Cart](screenshots/09-cart.png)
 
-*Alternative to Pip is Homebrew*
+---
 
-### Installation
-**1. Create a Folder where you want to save the project**
+## 🚀 Quick Start
 
-**2. Create a Virtual Environment and Activate**
+### Prerequisites
+- Python 3.10+
+- pip
 
-Install Virtual Environment First
-```
-$  pip install virtualenv
-```
+### 1. Clone & Setup
+```bash
+git clone https://github.com/labssynova-coder/django-jewelry-shop.git
+cd django-jewelry-shop
 
-Create Virtual Environment
+python -m venv .venv
+# Windows:
+.venv\Scripts\activate
+# macOS/Linux:
+source .venv/bin/activate
 
-For Windows
-```
-$  python -m venv venv
-```
-For Mac
-```
-$  python3 -m venv venv
-```
-
-Activate Virtual Environment
-
-For Windows
-```
-$  source venv/scripts/activate
-```
-
-For Mac
-```
-$  source venv/bin/activate
-```
-
-**3. Clone this project**
-```
-$  git clone https://github.com/vijaythapa333/django-jewelry-shop.git
-```
-
-Then, Enter the project
-```
-$  cd django-jewelry-shop
-```
-
-**4. Install Requirements from 'requirements.txt'**
-```python
-$  pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
-**5. Add the hosts**
-
-- Got to settings.py file 
-- Then, On allowed hosts, Add [‘*’]. 
-```python
-ALLOWED_HOSTS = ['*']
-```
-*No need to change on Mac.*
-
-
-**6. Now Run Server**
-
-Command for PC:
-```python
-$ python manage.py runserver
+### 2. Configure Environment
+```bash
+cp .env.example .env
+# Edit .env with your secret key and settings
 ```
 
-Command for Mac:
-```python
-$ python3 manage.py runserver
+### 3. Initialize Database
+```bash
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py loaddata fixtures/demo_data.json   # optional: demo products & categories
 ```
 
-**7. Login Credentials**
-
-Create Super User (Admin)
-
-Command for PC:
+### 4. Run
+```bash
+python manage.py runserver
 ```
-$  python manage.py createsuperuser
+- **Storefront**: http://127.0.0.1:8000/
+- **Admin panel**: http://127.0.0.1:8000/admin/
+
+---
+
+## 📁 Project Structure
+
+```
+django-jewelry-shop/
+├── jewelryshop/          # Django project settings
+│   ├── settings.py
+│   ├── urls.py
+│   └── static/
+│       ├── css/          # style.default.css, custom.css, admin_custom.css
+│       ├── img/          # hero, categories, placeholder images
+│       └── vendor/      # Bootstrap, Owl Carousel, Lightbox2, noUiSlider
+├── store/                # Main app
+│   ├── models.py         # Category, Product, Cart, Order, OrderItem, Address
+│   ├── views.py          # All storefront views
+│   ├── admin.py         # Jazzmin admin configuration
+│   ├── forms.py          # Registration, Address forms
+│   ├── tests.py          # 62 tests
+│   └── fixtures/         # demo_data.json
+├── templates/            # Django templates
+│   ├── base.html         # Base layout with theme CSS
+│   ├── navbar.html
+│   ├── footer.html
+│   ├── scripts.html
+│   ├── store/            # index, shop, detail, cart, checkout, orders, search
+│   ├── account/          # register, login, profile, address, password reset
+│   └── partials/         # _hero_breadcrumb, _add_to_cart_btn, _product_image
+├── media/                # User-uploaded images (gitignored)
+├── .env.example
+├── requirements.txt
+└── manage.py
 ```
 
-Command for MAC:
+---
+
+## 🧪 Running Tests
+
+```bash
+python manage.py test store -v 2
 ```
-$  python3 manage.py createsuperuser
-```
-Then Add Email, Username and Password
 
+---
 
+## 📦 Key Dependencies
 
-## For Sponsor or Projects Enquiry
-1. Email - hi@vijaythapa.com
-2. LinkedIn - [vijaythapa](https://www.linkedin.com/in/vijaythapa "Vijay Thapa on LinkedIn")
+| Package | Purpose |
+|---------|---------|
+| `Django>=4.2,<5.0` | Web framework |
+| `Pillow>=10.0` | Image handling |
+| `django-jazzmin>=3.0` | Admin theme |
 
+---
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+## 🙏 Credits
+
+- Original project by [Vijay Thapa](https://github.com/vijaythapa333)
+- Enhanced and maintained by [Synovalabs](https://synovalabs.tech)
