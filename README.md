@@ -6,14 +6,18 @@ A modern, elegant e-commerce website for jewelry built with **Django 4.2**, feat
 
 ---
 
-## 🌐 Live Demos
+## 🌐 Live Demo
 
-| Demo | URL | Credentials |
-|------|-----|-------------|
-| 🛍️ **Storefront** | [ljs-storefront.onrender.com](https://ljs-storefront.onrender.com) | Browse freely |
-| ⚙️ **Admin Panel** | [ljs-admin.onrender.com/admin](https://ljs-admin.onrender.com/admin) | `admin` / `admin123` |
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/labssynova-coder/LJS)
 
-> ⚠️ Live demos are hosted on Render's free tier — first visit may take ~30s to wake up.
+Click the button above to deploy your own instance on Render (free tier). Once deployed, you'll get:
+
+| Demo | Path | Credentials |
+|------|------|-------------|
+| 🛍️ **Storefront** | `https://your-app.onrender.com/` | Browse freely |
+| ⚙️ **Admin Panel** | `https://your-app.onrender.com/admin/` | `admin` / `admin123` |
+
+> ⚠️ Render free tier sleeps after inactivity — first visit may take ~30s to wake up.
 
 ---
 
