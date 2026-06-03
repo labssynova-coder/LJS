@@ -89,6 +89,21 @@ var ICONS = {
   plus: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>'
 };
 
+/* ---- Breadcrumb helper ---- */
+function breadcrumb(items) {
+  var ol = '<li class="breadcrumb-item"><a href="#/">Home</a></li>';
+  items.forEach(function (item, i) {
+    if (i === items.length - 1) {
+      ol += '<li class="breadcrumb-item active" aria-current="page">' + item.label + '</li>';
+    } else {
+      ol += '<li class="breadcrumb-item"><a href="' + item.href + '">' + item.label + '</a></li>';
+    }
+  });
+  return '<section class="py-5 bg-light breadcrumb-section"><div class="container"><div class="row px-4 px-lg-5 py-lg-4 align-items-center">' +
+    '<div class="col-lg-6"><h1 class="h2 text-uppercase mb-0">' + items[items.length - 1].label + '</h1></div>' +
+    '<div class="col-lg-6 text-lg-right"><nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-lg-end mb-0 px-0">' + ol + '</ol></nav></div></div></div></section>';
+}
+
 /* ---- Product card renderer ---- */
 function renderProductCard(product) {
   return '<div class="col-xl-3 col-lg-4 col-sm-6">' +
@@ -136,13 +151,13 @@ function renderHomepage(products) {
 
   categories.forEach(function (cat) {
     catHTML += '<div class="col-md-4 mb-4 mb-md-0">' +
-      '<a class="category-item" href="#/shop?category=' + cat.slug + '">' +
+      '<a class="category-item" href="#/categories">' +
         '<img class="img-fluid" src="' + cat.image + '" alt="' + cat.title + '">' +
         '<strong class="category-item-title">' + cat.title + '</strong>' +
       '</a>' +
     '</div>';
   });
-  catHTML += '</div></div></section>';
+  catHTML += '</div><div class="text-center mt-4"><a class="btn btn-outline-dark" href="#/categories">View All Categories</a></div></div></section>';
 
   var trendingHTML = '<section class="py-5"><div class="container"><header>' +
     '<p class="small text-muted small text-uppercase mb-1">Made the hard way</p>' +
@@ -187,6 +202,37 @@ function renderHomepage(products) {
   return hero + catHTML + trendingHTML + services + newsletter;
 }
 
+/* ---- Categories page ---- */
+function renderCategories(products) {
+  var html = breadcrumb([{ label: "Categories", href: "#/categories" }]);
+
+  html += '<section class="py-5"><div class="container">' +
+    '<header class="text-center mb-5">' +
+      '<p class="small text-muted text-uppercase mb-1">Browse our collection</p>' +
+      '<h2 class="h5 text-uppercase">All Categories</h2>' +
+    '</header>' +
+    '<div class="row">';
+
+  FALLBACK_CATEGORIES.forEach(function (cat) {
+    var count = products.filter(function (p) { return p.categorySlug === cat.slug; }).length;
+    html += '<div class="col-lg-4 col-md-6 mb-4">' +
+      '<a class="category-card" href="#/shop?category=' + cat.slug + '">' +
+        '<div class="category-card-img">' +
+          '<img class="img-fluid" src="' + cat.image + '" alt="' + cat.title + '">' +
+        '</div>' +
+        '<div class="category-card-body">' +
+          '<h4 class="text-uppercase">' + cat.title + '</h4>' +
+          '<p class="text-muted mb-0">' + count + ' product' + (count !== 1 ? 's' : '') + '</p>' +
+          '<span class="btn btn-sm btn-outline-dark mt-2">Browse ' + cat.title + '</span>' +
+        '</div>' +
+      '</a>' +
+    '</div>';
+  });
+
+  html += '</div></div></section>';
+  return html;
+}
+
 /* ---- Catalog / Shop page ---- */
 function renderCatalog(products, categoryFilter) {
   var filtered = categoryFilter
@@ -199,12 +245,10 @@ function renderCatalog(products, categoryFilter) {
     catName = found ? found.title : categoryFilter;
   }
 
-  var breadcrumb = '<section class="py-5 bg-light breadcrumb-section"><div class="container"><div class="row px-4 px-lg-5 py-lg-4 align-items-center">' +
-    '<div class="col-lg-6"><h1 class="h2 text-uppercase mb-0">Shop' + (catName ? " - " + catName : "") + '</h1></div>' +
-    '<div class="col-lg-6 text-lg-right"><nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-lg-end mb-0 px-0">' +
-      '<li class="breadcrumb-item"><a href="#/">Home</a></li>' +
-      '<li class="breadcrumb-item active" aria-current="page">' + (catName || "Shop") + '</li>' +
-    '</ol></nav></div></div></div></section>';
+  var bc = [{ label: "Shop", href: "#/shop" }];
+  if (catName) bc.push({ label: catName, href: "#/shop?category=" + categoryFilter });
+
+  var breadcrumbHTML = breadcrumb(bc);
 
   var sidebar = '<div class="col-lg-3 order-2 order-lg-1 sidebar">' +
     '<h5 class="text-uppercase mb-4">Categories</h5>';
@@ -217,7 +261,8 @@ function renderCatalog(products, categoryFilter) {
       '</div></a>';
   });
 
-  sidebar += '<div class="mt-4"><a href="#/shop" class="btn btn-sm btn-outline-dark">View All Products</a></div></div>';
+  sidebar += '<div class="mt-4"><a href="#/shop" class="btn btn-sm btn-outline-dark">View All Products</a></div>' +
+    '<div class="mt-3"><a href="#/categories" class="btn btn-sm btn-outline-dark">Browse Categories</a></div></div>';
 
   var productGrid = '<div class="col-lg-9 order-1 order-lg-2 mb-5 mb-lg-0">' +
     '<div class="row mb-3 align-items-center">' +
@@ -233,26 +278,29 @@ function renderCatalog(products, categoryFilter) {
 
   productGrid += '</div></div>';
 
-  return breadcrumb + '<section class="py-5"><div class="container p-0"><div class="row">' +
+  return breadcrumbHTML + '<section class="py-5"><div class="container p-0"><div class="row">' +
     sidebar + productGrid + '</div></div></section>';
 }
 
 /* ---- Product detail page ---- */
 function renderProductDetail(products, slug) {
   var product = products.find(function (p) { return p.slug === slug; });
-  if (!product) return '<div class="container py-5"><h2>Product not found</h2><a href="#/shop" class="btn btn-dark mt-3">Back to Shop</a></div>';
+  if (!product) return breadcrumb([{ label: "Product Not Found", href: "#/shop" }]) +
+    '<section class="py-5"><div class="container text-center">' +
+      '<h2>Product not found</h2>' +
+      '<p class="text-muted mb-4">The product you are looking for does not exist.</p>' +
+      '<a href="#/shop" class="btn btn-dark">Back to Shop</a>' +
+    '</div></section>';
 
   var related = products.filter(function (p) {
     return p.categorySlug === product.categorySlug && p.id !== product.id;
   }).slice(0, 4);
 
-  var breadcrumb = '<section class="py-5 bg-light breadcrumb-section"><div class="container"><div class="row px-4 px-lg-5 py-lg-4 align-items-center">' +
-    '<div class="col-lg-6"><h1 class="h2 text-uppercase mb-0">' + product.title + '</h1></div>' +
-    '<div class="col-lg-6 text-lg-right"><nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-lg-end mb-0 px-0">' +
-      '<li class="breadcrumb-item"><a href="#/">Home</a></li>' +
-      '<li class="breadcrumb-item"><a href="#/shop">Shop</a></li>' +
-      '<li class="breadcrumb-item active" aria-current="page">' + product.title + '</li>' +
-    '</ol></nav></div></div></div></section>';
+  var bc = breadcrumb([
+    { label: "Shop", href: "#/shop" },
+    { label: product.category, href: "#/shop?category=" + product.categorySlug },
+    { label: product.title, href: "#/product/" + product.slug }
+  ]);
 
   var stars = "";
   for (var i = 0; i < 5; i++) stars += ICONS.star + " ";
@@ -297,7 +345,7 @@ function renderProductDetail(products, slug) {
 
   detail += '</div></section>';
 
-  return breadcrumb + detail;
+  return bc + detail;
 }
 
 /* Detail page quantity helpers */
@@ -331,12 +379,7 @@ function renderSearchResults(products, query) {
            p.shortDescription.toLowerCase().indexOf(q) !== -1;
   }) : [];
 
-  var breadcrumb = '<section class="py-5 bg-light breadcrumb-section"><div class="container"><div class="row px-4 px-lg-5 py-lg-4 align-items-center">' +
-    '<div class="col-lg-6"><h1 class="h2 text-uppercase mb-0">Search Results</h1></div>' +
-    '<div class="col-lg-6 text-lg-right"><nav aria-label="breadcrumb"><ol class="breadcrumb justify-content-lg-end mb-0 px-0">' +
-      '<li class="breadcrumb-item"><a href="#/">Home</a></li>' +
-      '<li class="breadcrumb-item active" aria-current="page">Search</li>' +
-    '</ol></nav></div></div></div></section>';
+  var bc = breadcrumb([{ label: "Search", href: "#/search" }]);
 
   var content = '<section class="py-5"><div class="container">';
   if (q) {
@@ -354,7 +397,322 @@ function renderSearchResults(products, query) {
   }
 
   content += '</div></section>';
-  return breadcrumb + content;
+  return bc + content;
+}
+
+/* ---- Cart page (full page, not just drawer) ---- */
+function renderCartPage() {
+  var products = window._products || [];
+  var cart = getCart();
+  var ids = Object.keys(cart);
+
+  var bc = breadcrumb([{ label: "Shopping Cart", href: "#/cart" }]);
+
+  if (ids.length === 0) {
+    return bc + '<section class="py-5"><div class="container text-center">' +
+      '<h2 class="mb-3">Your cart is empty</h2>' +
+      '<p class="text-muted mb-4">Looks like you haven\'t added anything to your cart yet.</p>' +
+      '<a href="#/shop" class="btn btn-dark">Continue Shopping</a>' +
+    '</div></section>';
+  }
+
+  var total = 0;
+  var shipping = 10;
+  var html = '<section class="py-5"><div class="container">' +
+    '<div class="row">' +
+      '<div class="col-lg-8 mb-4 mb-lg-0">' +
+        '<div class="cart-table-header d-none d-md-flex py-3 border-bottom font-weight-bold small text-uppercase">' +
+          '<div class="col-md-4">Product</div>' +
+          '<div class="col-md-2 text-center">Price</div>' +
+          '<div class="col-md-3 text-center">Quantity</div>' +
+          '<div class="col-md-2 text-center">Subtotal</div>' +
+          '<div class="col-md-1"></div>' +
+        '</div>';
+
+  ids.forEach(function (id) {
+    var p = products.find(function (pr) { return String(pr.id) === id; });
+    if (!p) return;
+    var subtotal = p.price * cart[id];
+    total += subtotal;
+    html += '<div class="cart-table-row d-flex align-items-center py-3 border-bottom">' +
+      '<div class="col-md-4">' +
+        '<div class="d-flex align-items-center">' +
+          '<a href="#/product/' + p.slug + '"><img src="' + p.image + '" alt="' + p.title + '" class="cart-item-img mr-3"></a>' +
+          '<a class="reset-anchor" href="#/product/' + p.slug + '">' + p.title + '</a>' +
+        '</div>' +
+      '</div>' +
+      '<div class="col-md-2 text-center">' + formatPrice(p.price) + '</div>' +
+      '<div class="col-md-3 text-center">' +
+        '<div class="d-inline-flex align-items-center border">' +
+          '<button class="btn btn-sm py-0 px-2" onclick="updateCartQty(' + id + ',-1)">' + ICONS.minus + '</button>' +
+          '<span class="px-3">' + cart[id] + '</span>' +
+          '<button class="btn btn-sm py-0 px-2" onclick="updateCartQty(' + id + ',1)">' + ICONS.plus + '</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="col-md-2 text-center">' + formatPrice(subtotal) + '</div>' +
+      '<div class="col-md-1 text-center"><button class="btn btn-sm text-danger" onclick="removeFromCart(' + id + ');route()">&times;</button></div>' +
+    '</div>';
+  });
+
+  html += '</div>' +
+    '<div class="col-lg-4">' +
+      '<div class="bg-light p-4">' +
+        '<h5 class="text-uppercase mb-4">Order summary</h5>' +
+        '<div class="d-flex justify-content-between mb-2"><span>Subtotal</span><span>' + formatPrice(total) + '</span></div>' +
+        '<div class="d-flex justify-content-between mb-2"><span>Shipping</span><span>' + formatPrice(shipping) + '</span></div>' +
+        '<hr>' +
+        '<div class="d-flex justify-content-between mb-4"><strong class="text-uppercase">Total</strong><strong>' + formatPrice(total + shipping) + '</strong></div>' +
+        '<a href="#/checkout" class="btn btn-dark btn-block">Proceed to Checkout</a>' +
+        '<a href="#/shop" class="btn btn-outline-dark btn-block mt-2">Continue Shopping</a>' +
+      '</div>' +
+    '</div>' +
+  '</div></div></section>';
+
+  return bc + html;
+}
+
+/* ---- Checkout page ---- */
+function renderCheckout() {
+  var cart = getCart();
+  var products = window._products || [];
+  var ids = Object.keys(cart);
+
+  if (ids.length === 0) {
+    return breadcrumb([{ label: "Checkout", href: "#/checkout" }]) +
+      '<section class="py-5"><div class="container text-center">' +
+        '<h2 class="mb-3">Your cart is empty</h2>' +
+        '<p class="text-muted mb-4">Add some products before checking out.</p>' +
+        '<a href="#/shop" class="btn btn-dark">Continue Shopping</a>' +
+      '</div></section>';
+  }
+
+  var total = 0;
+  var shipping = 10;
+  ids.forEach(function (id) {
+    var p = products.find(function (pr) { return String(pr.id) === id; });
+    if (p) total += p.price * cart[id];
+  });
+
+  var bc = breadcrumb([{ label: "Cart", href: "#/cart" }, { label: "Checkout", href: "#/checkout" }]);
+
+  var html = '<section class="py-5"><div class="container">' +
+    '<div class="row">' +
+      '<div class="col-lg-8 mb-4 mb-lg-0">' +
+        '<h3 class="text-uppercase mb-4">Billing details</h3>' +
+        '<form onsubmit="event.preventDefault();_showToast(\'Demo mode — order placement is simulated\',\'success\');localStorage.removeItem(\'ljs_cart\');updateCartUI();window.location.hash=\'#/order-placed\'">' +
+          '<div class="row">' +
+            '<div class="col-md-6 mb-3"><label class="text-uppercase small">First Name</label><input class="form-control" type="text" required></div>' +
+            '<div class="col-md-6 mb-3"><label class="text-uppercase small">Last Name</label><input class="form-control" type="text" required></div>' +
+          '</div>' +
+          '<div class="mb-3"><label class="text-uppercase small">Email</label><input class="form-control" type="email" required></div>' +
+          '<div class="mb-3"><label class="text-uppercase small">Address</label><input class="form-control" type="text" required></div>' +
+          '<div class="row">' +
+            '<div class="col-md-6 mb-3"><label class="text-uppercase small">City</label><input class="form-control" type="text" required></div>' +
+            '<div class="col-md-6 mb-3"><label class="text-uppercase small">Phone</label><input class="form-control" type="tel" required></div>' +
+          '</div>' +
+          '<h4 class="text-uppercase mt-4 mb-3">Payment method</h4>' +
+          '<div class="bg-light p-3 mb-3">' +
+            '<div class="form-check mb-2"><input class="form-check-input" type="radio" name="payment" id="pay-cod" checked><label class="form-check-label" for="pay-cod">Cash on Delivery</label></div>' +
+            '<div class="form-check"><input class="form-check-input" type="radio" name="payment" id="pay-paypal"><label class="form-check-label" for="pay-paypal">PayPal</label></div>' +
+          '</div>' +
+          '<button type="submit" class="btn btn-dark btn-lg btn-block">Place Order</button>' +
+        '</form>' +
+      '</div>' +
+      '<div class="col-lg-4">' +
+        '<div class="bg-light p-4">' +
+          '<h5 class="text-uppercase mb-4">Your order</h5>';
+
+  ids.forEach(function (id) {
+    var p = products.find(function (pr) { return String(pr.id) === id; });
+    if (!p) return;
+    html += '<div class="d-flex justify-content-between mb-2 small">' +
+      '<span>' + p.title + ' x ' + cart[id] + '</span>' +
+      '<span>' + formatPrice(p.price * cart[id]) + '</span></div>';
+  });
+
+  html += '<hr>' +
+    '<div class="d-flex justify-content-between mb-2"><span>Subtotal</span><span>' + formatPrice(total) + '</span></div>' +
+    '<div class="d-flex justify-content-between mb-2"><span>Shipping</span><span>' + formatPrice(shipping) + '</span></div>' +
+    '<hr>' +
+    '<div class="d-flex justify-content-between"><strong>Total</strong><strong>' + formatPrice(total + shipping) + '</strong></div>' +
+  '</div></div>' +
+  '</div></div></section>';
+
+  return bc + html;
+}
+
+/* ---- Order placed page ---- */
+function renderOrderPlaced() {
+  return breadcrumb([{ label: "Order Placed", href: "#/order-placed" }]) +
+    '<section class="py-5"><div class="container text-center">' +
+      '<div class="py-5">' +
+        '<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#dcb14a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>' +
+        '<h2 class="mt-4 mb-3">Order placed successfully!</h2>' +
+        '<p class="text-muted mb-4">Thank you for your purchase. In demo mode, this is a simulated order.</p>' +
+        '<a href="#/shop" class="btn btn-dark">Continue Shopping</a>' +
+      '</div>' +
+    '</div></section>';
+}
+
+/* ---- Contact page ---- */
+function renderContact() {
+  return breadcrumb([{ label: "Contact", href: "#/contact" }]) +
+    '<section class="py-5"><div class="container">' +
+      '<div class="row">' +
+        '<div class="col-lg-8 mb-4 mb-lg-0">' +
+          '<h3 class="text-uppercase mb-4">Get in touch</h3>' +
+          '<form onsubmit="event.preventDefault();_showToast(\'Demo mode — message sending is simulated\',\'success\')">' +
+            '<div class="row">' +
+              '<div class="col-md-6 mb-3"><label class="text-uppercase small">First Name</label><input class="form-control" type="text" required></div>' +
+              '<div class="col-md-6 mb-3"><label class="text-uppercase small">Last Name</label><input class="form-control" type="text" required></div>' +
+            '</div>' +
+            '<div class="mb-3"><label class="text-uppercase small">Email</label><input class="form-control" type="email" required></div>' +
+            '<div class="mb-3"><label class="text-uppercase small">Subject</label><input class="form-control" type="text" required></div>' +
+            '<div class="mb-3"><label class="text-uppercase small">Message</label><textarea class="form-control" rows="5" required></textarea></div>' +
+            '<button type="submit" class="btn btn-dark">Send Message</button>' +
+          '</form>' +
+        '</div>' +
+        '<div class="col-lg-4">' +
+          '<div class="bg-light p-4 mb-4">' +
+            '<h6 class="text-uppercase mb-3">Customer service</h6>' +
+            '<p class="text-small text-muted mb-1"><strong>Email:</strong> support@ljs-jewelry.com</p>' +
+            '<p class="text-small text-muted mb-1"><strong>Phone:</strong> +1 (555) 123-4567</p>' +
+            '<p class="text-small text-muted mb-0"><strong>Hours:</strong> Mon-Fri 9am-6pm</p>' +
+          '</div>' +
+          '<div class="bg-light p-4">' +
+            '<h6 class="text-uppercase mb-3">Return policy</h6>' +
+            '<p class="text-small text-muted mb-0">We offer a 30-day return policy on all items. Products must be in original condition with tags attached.</p>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div></section>';
+}
+
+/* ---- Login page ---- */
+function renderLogin() {
+  return breadcrumb([{ label: "Login", href: "#/login" }]) +
+    '<section class="py-5"><div class="container">' +
+      '<div class="row justify-content-center">' +
+        '<div class="col-lg-5">' +
+          '<div class="bg-light p-5">' +
+            '<h3 class="text-uppercase text-center mb-4">Sign in</h3>' +
+            '<form onsubmit="event.preventDefault();_showToast(\'Demo mode — login is simulated\',\'success\')">' +
+              '<div class="mb-3"><label class="text-uppercase small">Email</label><input class="form-control form-control-lg" type="email" placeholder="Enter your email" required></div>' +
+              '<div class="mb-4"><label class="text-uppercase small">Password</label><input class="form-control form-control-lg" type="password" placeholder="Enter your password" required></div>' +
+              '<button type="submit" class="btn btn-dark btn-lg btn-block">Login</button>' +
+            '</form>' +
+            '<p class="text-center mt-3 mb-0 text-muted small">Don\'t have an account? <a href="#/register">Register here</a></p>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div></section>';
+}
+
+/* ---- Register page ---- */
+function renderRegister() {
+  return breadcrumb([{ label: "Register", href: "#/register" }]) +
+    '<section class="py-5"><div class="container">' +
+      '<div class="row justify-content-center">' +
+        '<div class="col-lg-6">' +
+          '<div class="bg-light p-5">' +
+            '<h3 class="text-uppercase text-center mb-4">Create account</h3>' +
+            '<form onsubmit="event.preventDefault();_showToast(\'Demo mode — registration is simulated\',\'success\')">' +
+              '<div class="row">' +
+                '<div class="col-md-6 mb-3"><label class="text-uppercase small">First Name</label><input class="form-control form-control-lg" type="text" required></div>' +
+                '<div class="col-md-6 mb-3"><label class="text-uppercase small">Last Name</label><input class="form-control form-control-lg" type="text" required></div>' +
+              '</div>' +
+              '<div class="mb-3"><label class="text-uppercase small">Email</label><input class="form-control form-control-lg" type="email" required></div>' +
+              '<div class="mb-3"><label class="text-uppercase small">Username</label><input class="form-control form-control-lg" type="text" required></div>' +
+              '<div class="mb-3"><label class="text-uppercase small">Password</label><input class="form-control form-control-lg" type="password" required></div>' +
+              '<div class="mb-4"><label class="text-uppercase small">Confirm Password</label><input class="form-control form-control-lg" type="password" required></div>' +
+              '<button type="submit" class="btn btn-dark btn-lg btn-block">Register</button>' +
+            '</form>' +
+            '<p class="text-center mt-3 mb-0 text-muted small">Already have an account? <a href="#/login">Sign in</a></p>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div></section>';
+}
+
+/* ---- FAQ / Help page ---- */
+function renderFAQ() {
+  var faqs = [
+    { q: "How do I place an order?", a: "Browse our products, add items to your cart, then proceed to checkout. Fill in your billing details and select a payment method." },
+    { q: "What payment methods do you accept?", a: "We accept Cash on Delivery and PayPal. All transactions are secure and encrypted." },
+    { q: "How long does shipping take?", a: "Standard shipping takes 5-7 business days. Express shipping (where available) takes 2-3 business days." },
+    { q: "What is your return policy?", a: "We offer a 30-day return policy on all items. Products must be in their original condition with tags attached. Contact our customer service to initiate a return." },
+    { q: "Do you offer international shipping?", a: "Yes, we ship worldwide. International shipping times and costs vary by destination." },
+    { q: "How can I track my order?", a: "Once your order ships, you'll receive a tracking number via email. Use this to track your package on the carrier's website." }
+  ];
+
+  var html = breadcrumb([{ label: "FAQs", href: "#/faq" }]) +
+    '<section class="py-5"><div class="container">' +
+      '<div class="row justify-content-center"><div class="col-lg-8">';
+
+  faqs.forEach(function (faq, i) {
+    html += '<div class="faq-item mb-3">' +
+      '<div class="faq-question bg-light p-3 cursor-pointer" onclick="toggleFaq(' + i + ')">' +
+        '<strong class="text-uppercase small">' + faq.q + '</strong>' +
+        '<span class="faq-toggle float-right" id="faq-toggle-' + i + '">+</span>' +
+      '</div>' +
+      '<div class="faq-answer p-3 border" id="faq-answer-' + i + '" style="display:none;">' +
+        '<p class="text-muted mb-0">' + faq.a + '</p>' +
+      '</div>' +
+    '</div>';
+  });
+
+  html += '</div></div></div></section>';
+  return html;
+}
+
+function toggleFaq(i) {
+  var answer = document.getElementById("faq-answer-" + i);
+  var toggle = document.getElementById("faq-toggle-" + i);
+  if (!answer) return;
+  if (answer.style.display === "none") {
+    answer.style.display = "block";
+    if (toggle) toggle.textContent = "−";
+  } else {
+    answer.style.display = "none";
+    if (toggle) toggle.textContent = "+";
+  }
+}
+
+/* ---- About page ---- */
+function renderAbout() {
+  return breadcrumb([{ label: "About Us", href: "#/about" }]) +
+    '<section class="py-5 about-section"><div class="container">' +
+      '<div class="row mb-5">' +
+        '<div class="col-lg-6 mb-4 mb-lg-0">' +
+          '<h3 class="text-uppercase mb-3">About LJS</h3>' +
+          '<p class="text-muted">Luxury Jewelry Shop (LJS) is a premium jewelry retailer offering a curated collection of fine jewelry, watches, and accessories. Our pieces are crafted with meticulous attention to detail, using only the finest materials — gold, platinum, diamonds, and precious gemstones.</p>' +
+          '<p class="text-muted">Founded with a passion for timeless elegance, we believe that every piece of jewelry tells a story. From delicate everyday pieces to statement creations, our collections are designed to celebrate life\'s most meaningful moments.</p>' +
+        '</div>' +
+        '<div class="col-lg-6">' +
+          '<img class="img-fluid" src="assets/images/hero/shop-hero.jpg" alt="LJS Jewelry Collection">' +
+        '</div>' +
+      '</div>' +
+      '<div class="row text-center py-4 border-top border-bottom">' +
+        '<div class="col-md-3 col-6 mb-3 mb-md-0 about-value"><h4>10+</h4><p>Years of Excellence</p></div>' +
+        '<div class="col-md-3 col-6 mb-3 mb-md-0 about-value"><h4>5000+</h4><p>Happy Customers</p></div>' +
+        '<div class="col-md-3 col-6 about-value"><h4>200+</h4><p>Unique Designs</p></div>' +
+        '<div class="col-md-3 col-6 about-value"><h4>7</h4><p>Collections</p></div>' +
+      '</div>' +
+      '<div class="row mt-5">' +
+        '<div class="col-md-4 mb-4 text-center">' +
+          '<h5 class="text-uppercase mb-2">Quality</h5>' +
+          '<p class="text-muted text-small">Every piece undergoes rigorous quality inspection to ensure it meets our exacting standards.</p>' +
+        '</div>' +
+        '<div class="col-md-4 mb-4 text-center">' +
+          '<h5 class="text-uppercase mb-2">Craftsmanship</h5>' +
+          '<p class="text-muted text-small">Our master artisans bring decades of experience to every handcrafted piece.</p>' +
+        '</div>' +
+        '<div class="col-md-4 mb-4 text-center">' +
+          '<h5 class="text-uppercase mb-2">Service</h5>' +
+          '<p class="text-muted text-small">From purchase to aftercare, our dedicated team ensures your complete satisfaction.</p>' +
+        '</div>' +
+      '</div>' +
+    '</div></section>';
 }
 
 /* ---- Cart drawer ---- */
@@ -438,6 +796,9 @@ function route() {
     var cat = params.category || "";
     document.title = cat ? "Shop - " + cat + " | LJS" : "Shop | LJS";
     app.innerHTML = renderCatalog(products, cat);
+  } else if (path === "/categories") {
+    document.title = "Categories | LJS";
+    app.innerHTML = renderCategories(products);
   } else if (path.indexOf("/product/") === 0) {
     var slug = path.replace("/product/", "");
     var prod = products.find(function (p) { return p.slug === slug; });
@@ -447,9 +808,38 @@ function route() {
     var q = params.q || "";
     document.title = q ? "Search: " + q + " | LJS" : "Search | LJS";
     app.innerHTML = renderSearchResults(products, q);
+  } else if (path === "/cart") {
+    document.title = "Shopping Cart | LJS";
+    app.innerHTML = renderCartPage();
+  } else if (path === "/checkout") {
+    document.title = "Checkout | LJS";
+    app.innerHTML = renderCheckout();
+  } else if (path === "/order-placed") {
+    document.title = "Order Placed | LJS";
+    app.innerHTML = renderOrderPlaced();
+  } else if (path === "/contact") {
+    document.title = "Contact | LJS";
+    app.innerHTML = renderContact();
+  } else if (path === "/login") {
+    document.title = "Login | LJS";
+    app.innerHTML = renderLogin();
+  } else if (path === "/register") {
+    document.title = "Register | LJS";
+    app.innerHTML = renderRegister();
+  } else if (path === "/faq") {
+    document.title = "FAQs | LJS";
+    app.innerHTML = renderFAQ();
+  } else if (path === "/about") {
+    document.title = "About | LJS";
+    app.innerHTML = renderAbout();
   } else {
-    document.title = "LJS — Luxury Jewelry Shop";
-    app.innerHTML = '<div class="container py-5 text-center"><h2>Page not found</h2><a href="#/" class="btn btn-dark mt-3">Go Home</a></div>';
+    document.title = "Page Not Found | LJS";
+    app.innerHTML = '<section class="py-5"><div class="container text-center">' +
+      '<h2 class="mb-3">Page not found</h2>' +
+      '<p class="text-muted mb-4">The page you are looking for does not exist.</p>' +
+      '<a href="#/" class="btn btn-dark">Go Home</a>' +
+      '<a href="#/shop" class="btn btn-outline-dark ml-2">Browse Shop</a>' +
+    '</div></section>';
   }
 
   window.scrollTo(0, 0);
@@ -464,7 +854,6 @@ function handleSearch(e) {
   if (q) {
     window.location.hash = "#/search?q=" + encodeURIComponent(q);
     closeMobileSearch();
-    /* Clear search inputs */
     var desktop = document.getElementById("search-input");
     var mobile = document.getElementById("mobile-search-input");
     if (desktop) desktop.value = "";
@@ -538,7 +927,6 @@ async function initApp() {
     if (mobileForm) mobileForm.addEventListener("submit", handleSearch);
   } catch (err) {
     console.error("initApp failed:", err);
-    /* Force-remove loading state so the page isn't stuck */
     var loader = document.getElementById("app-loader");
     if (loader) loader.style.display = "none";
     var app = document.getElementById("app-content");
