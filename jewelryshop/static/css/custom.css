@@ -14,23 +14,6 @@
   }
 }
 
-/* --- WISHLIST HEART TOGGLE --- */
-.wishlist-toggle i.far.fa-heart,
-.wishlist-btn i.far.fa-heart {
-  transition: all 0.3s ease;
-}
-.wishlist-toggle.active i.far.fa-heart,
-.wishlist-btn.active i.far.fa-heart {
-  color: #dc3545;
-  font-weight: 900;
-}
-.wishlist-toggle.active i.far.fa-heart:before,
-.wishlist-btn.active i.far.fa-heart:before {
-  content: "\f004";
-  font-weight: 900;
-  color: #dc3545;
-}
-
 /* --- ABOUT & CONTACT SECTIONS (footer anchors) --- */
 #about-us, #contact-us {
   scroll-margin-top: 80px;
@@ -217,17 +200,7 @@ button, a.btn {
 
 /* --- NAVBAR MOBILE --- */
 @media (max-width: 991.98px) {
-  .navbar .form-inline {
-    width: 100%;
-    margin: 0.5rem 0;
-  }
-  .navbar .form-inline .form-control {
-    width: 65%;
-  }
-  .navbar .form-inline .btn {
-    width: 30%;
-  }
-  /* Stack the search bar nicely */
+  /* Stack the nav items nicely */
   .navbar-collapse {
     padding-bottom: 0.5rem;
   }

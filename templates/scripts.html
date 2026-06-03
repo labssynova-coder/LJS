@@ -67,50 +67,6 @@
       </script>
       <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-
-      <!-- Wishlist toggle -->
-      <script>
-        document.addEventListener('DOMContentLoaded', function() {
-          document.querySelectorAll('.wishlist-toggle, .wishlist-btn').forEach(function(btn) {
-            btn.addEventListener('click', function(e) {
-              e.preventDefault();
-              var icon = this.querySelector('i');
-              if (icon) {
-                if (icon.classList.contains('far')) {
-                  icon.classList.remove('far');
-                  icon.classList.add('fas');
-                  icon.style.color = '#dc3545';
-                } else {
-                  icon.classList.remove('fas');
-                  icon.classList.add('far');
-                  icon.style.color = '';
-                }
-              }
-              this.classList.toggle('active');
-            });
-          });
-
-          // Hero carousel
-          var heroSlider = document.querySelector('.hero-slider');
-          if (heroSlider) {
-            $(heroSlider).owlCarousel({
-              loop: true,
-              autoplay: true,
-              autoplayTimeout: 5000,
-              autoplayHoverPause: true,
-              nav: true,
-              dots: true,
-              navText: ['<i class="fas fa-chevron-left"></i>', '<i class="fas fa-chevron-right"></i>'],
-              items: 1,
-              responsive: {
-                0: { items: 1 },
-                600: { items: 1 },
-                1000: { items: 1 }
-              }
-            });
-          }
-        });
-      </script>
     </div>
   </body>
 </html>
