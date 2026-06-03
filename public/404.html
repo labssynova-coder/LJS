@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LJS — Redirecting...</title>
+  <script>
+    /* GitHub Pages SPA redirect:
+       Convert /LJS/shop → /LJS/#/shop
+       so the hash-based router can handle it. */
+    var path = window.location.pathname;
+    var search = window.location.search;
+    var base = '/LJS/';
+
+    /* Strip trailing slash and base path */
+    var route = path.replace(/\/+$/, '').replace(base, '');
+    if (!route || route === 'index.html') route = '';
+
+    /* Build hash URL */
+    var hashUrl = base + '#' + (route ? '/' + route : '/');
+    if (search) hashUrl += '?' + search.substring(1);
+
+    window.location.replace(hashUrl);
+  </script>
+</head>
+<body>
+  <p>Redirecting... If you are not redirected, <a href="/LJS/">click here</a>.</p>
+</body>
+</html>

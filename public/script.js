@@ -458,12 +458,17 @@ function route() {
 /* ---- Search handler ---- */
 function handleSearch(e) {
   e.preventDefault();
-  var input = document.getElementById("search-input");
+  var input = document.getElementById("search-input") || document.getElementById("mobile-search-input");
   if (!input) return;
   var q = input.value.trim();
   if (q) {
     window.location.hash = "#/search?q=" + encodeURIComponent(q);
     closeMobileSearch();
+    /* Clear search inputs */
+    var desktop = document.getElementById("search-input");
+    var mobile = document.getElementById("mobile-search-input");
+    if (desktop) desktop.value = "";
+    if (mobile) mobile.value = "";
   }
 }
 
@@ -501,6 +506,11 @@ document.addEventListener("click", function (e) {
 /* ---- Initialize ---- */
 async function initApp() {
   try {
+    /* Default hash to homepage if missing */
+    if (!window.location.hash || window.location.hash === "#" || window.location.hash === "#/") {
+      window.location.hash = "#/";
+    }
+
     /* Show demo banner if in demo mode */
     var banner = document.getElementById("demo-banner");
     if (banner) banner.style.display = "block";
@@ -521,9 +531,11 @@ async function initApp() {
     route();
     window.addEventListener("hashchange", route);
 
-    /* Search form */
+    /* Search forms */
     var searchForm = document.getElementById("search-form");
     if (searchForm) searchForm.addEventListener("submit", handleSearch);
+    var mobileForm = document.querySelector("#mobile-search-bar form");
+    if (mobileForm) mobileForm.addEventListener("submit", handleSearch);
   } catch (err) {
     console.error("initApp failed:", err);
     /* Force-remove loading state so the page isn't stuck */
