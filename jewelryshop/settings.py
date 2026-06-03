@@ -173,7 +173,7 @@ JAZZMIN_SETTINGS = {
     # Login page background
     "login_background": None,
     # CSS to inject into all admin pages
-    "custom_css": None,
+    "custom_css": "css/admin_custom.css",
     # CSS file for the login page
     "login_custom_css": None,
     # Icons for each model
@@ -197,7 +197,7 @@ JAZZMIN_SETTINGS = {
 
 # Jazzmin UI Tweaks (separate setting per jazzmin convention)
 JAZZMIN_UI_TWEAKS = {
-    "theme": "darkly",
-    "sidebar": "sidebar-dark-primary",
+    "theme": "adminlte",
+    "sidebar": "sidebar-dark-navy",
     "navbar": "navbar-dark",
 }

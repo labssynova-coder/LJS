@@ -55,7 +55,7 @@
                   </form>
                 </div>
 
-              </div><a class="btn btn-link text-dark p-0 mb-4" href="#"><i class="far fa-heart mr-2"></i>Add to wish list</a><br>
+              </div><a class="btn btn-link text-dark p-0 mb-4 wishlist-btn" href="#"><i class="far fa-heart mr-2"></i>Add to wish list</a><br>
               <ul class="list-unstyled small d-inline-block">
                 <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase">SKU:</strong><span class="ml-2 text-muted">{{product.sku}}</span></li>
                 <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Category:</strong><a class="reset-anchor ml-2" href="{% url 'store:category-products' product.category.slug %}">{{product.category}}</a></li>
@@ -136,7 +136,7 @@
 
                       <div class="product-overlay">
                         <ul class="mb-0 list-inline">
-                          <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#" aria-label="Add to wishlist"><i class="far fa-heart"></i></a></li>
+                          <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark wishlist-btn" href="#" aria-label="Add to wishlist"><i class="far fa-heart"></i></a></li>
                           <li class="list-inline-item m-0 p-0">{% include 'partials/_add_to_cart_btn.html' with product=rp %}</li>
                           <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="{% url 'store:product-detail' rp.slug %}" aria-label="View details"><i class="fas fa-expand"></i></a></li>
                         </ul>

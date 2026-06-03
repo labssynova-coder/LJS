@@ -71,7 +71,7 @@
       <!-- Wishlist toggle -->
       <script>
         document.addEventListener('DOMContentLoaded', function() {
-          document.querySelectorAll('.wishlist-toggle, a[href="#"][title="Wishlist"], .product-overlay .btn-outline-dark').forEach(function(btn) {
+          document.querySelectorAll('.wishlist-toggle, .wishlist-btn').forEach(function(btn) {
             btn.addEventListener('click', function(e) {
               e.preventDefault();
               var icon = this.querySelector('i');

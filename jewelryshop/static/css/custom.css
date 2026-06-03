@@ -15,14 +15,17 @@
 }
 
 /* --- WISHLIST HEART TOGGLE --- */
-.wishlist-toggle i.far.fa-heart {
+.wishlist-toggle i.far.fa-heart,
+.wishlist-btn i.far.fa-heart {
   transition: all 0.3s ease;
 }
-.wishlist-toggle.active i.far.fa-heart {
+.wishlist-toggle.active i.far.fa-heart,
+.wishlist-btn.active i.far.fa-heart {
   color: #dc3545;
   font-weight: 900;
 }
-.wishlist-toggle.active i.far.fa-heart:before {
+.wishlist-toggle.active i.far.fa-heart:before,
+.wishlist-btn.active i.far.fa-heart:before {
   content: "\f004";
   font-weight: 900;
   color: #dc3545;
@@ -325,6 +328,75 @@ section.py-5.bg-light {
   h1, .h2 {
     font-size: 1.3rem;
   }
+}
+
+/* --- GOLDEN THEME: btn-dark hover = golden accent --- */
+.btn-dark:hover, .btn-dark:active {
+  background-color: #dcb14a !important;
+  border-color: #dcb14a !important;
+  color: #111 !important;
+}
+.btn-outline-dark:hover, .btn-outline-dark:active {
+  background-color: #dcb14a !important;
+  border-color: #dcb14a !important;
+  color: #111 !important;
+}
+
+/* --- GOLDEN THEME: card headers --- */
+.card-header.bg-dark {
+  border-bottom: 2px solid #dcb14a !important;
+}
+
+/* --- GOLDEN THEME: links --- */
+a.reset-anchor:hover {
+  color: #dcb14a !important;
+}
+.breadcrumb-item a:hover {
+  color: #dcb14a !important;
+}
+.dropdown-item:hover {
+  color: #dcb14a !important;
+  background-color: rgba(220, 177, 74, 0.1) !important;
+}
+
+/* --- GOLDEN THEME: pagination active --- */
+.page-item.active .page-link {
+  background-color: #dcb14a !important;
+  border-color: #dcb14a !important;
+  color: #111 !important;
+}
+.page-link:hover {
+  color: #dcb14a !important;
+}
+
+/* --- GOLDEN THEME: form focus --- */
+.form-control:focus {
+  border-color: #dcb14a !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 177, 74, 0.25) !important;
+}
+
+/* --- GOLDEN THEME: table headers --- */
+.table thead th {
+  border-bottom: 2px solid #dcb14a !important;
+}
+
+/* --- GOLDEN THEME: hero bar accent --- */
+section.py-5.bg-light {
+  border-bottom: 2px solid #dcb14a;
+}
+
+/* --- TEXT CONTRAST FIXES --- */
+/* Ensure labels are always dark on light backgrounds */
+.text-small.text-uppercase {
+  color: #343a40 !important;
+}
+/* Card body text should always be dark */
+.card-body {
+  color: #212529;
+}
+/* Ensure bg-dark card headers have readable text */
+.card-header.bg-dark.text-white {
+  color: #dcb14a !important;
 }
 
 /* --- ADD TO CART BUTTON FEEDBACK --- */
