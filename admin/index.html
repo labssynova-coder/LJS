@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LJS Admin Panel - Luxury Jewelry Shop Administration">
+  <title>LJS Admin</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <!-- Demo Banner (hidden by default, shown in demo mode) -->
+  <div id="demo-banner">
+    <span class="banner-text">&#9888;&#65039; Demo Mode &mdash; You are viewing a static preview. No real backend is connected. Data is simulated and changes will not persist.</span>
+    <button id="demo-banner-close" class="banner-close" title="Dismiss">&times;</button>
+  </div>
+
+  <!-- Sidebar Overlay (mobile) -->
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+  <!-- Login Screen -->
+  <div id="login-screen">
+    <div class="login-card">
+      <div class="login-logo">
+        <span class="logo-gold">LJS</span> Admin
+      </div>
+      <div class="login-subtitle">Luxury Jewelry Shop Administration</div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="login-username">Username</label>
+          <input type="text" id="login-username" placeholder="Enter username" autocomplete="username" required>
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="Enter password" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="btn-login">Sign In</button>
+      </form>
+
+      <div class="login-demo-note">
+        In demo mode, any credentials will authenticate automatically.
+      </div>
+    </div>
+  </div>
+
+  <!-- App Screen (hidden until authenticated) -->
+  <div id="app-screen">
+
+    <!-- Sidebar -->
+    <aside id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand">
+          <span class="brand-gold">LJS</span> Admin
+        </div>
+        <div class="brand-sub">Jewelry Shop</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Main</div>
+        <a href="#/" class="nav-link active" data-route="#/" onclick="closeSidebar()">
+          <span class="nav-icon">&#x1F4CA;</span>
+          <span class="nav-label">Dashboard</span>
+        </a>
+        <a href="#/products" class="nav-link" data-route="#/products" onclick="closeSidebar()">
+          <span class="nav-icon">&#x1F48E;</span>
+          <span class="nav-label">Products</span>
+        </a>
+        <a href="#/categories" class="nav-link" data-route="#/categories" onclick="closeSidebar()">
+          <span class="nav-icon">&#x1F4C1;</span>
+          <span class="nav-label">Categories</span>
+        </a>
+        <a href="#/orders" class="nav-link" data-route="#/orders" onclick="closeSidebar()">
+          <span class="nav-icon">&#x1F4E6;</span>
+          <span class="nav-label">Orders</span>
+        </a>
+
+        <div class="nav-section-title">System</div>
+        <a href="#/" class="nav-link" onclick="showToast('Site settings are available in the full admin', 'info'); closeSidebar();">
+          <span class="nav-icon">&#x2699;&#xFE0F;</span>
+          <span class="nav-label">Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        &copy; 2026 LJS Admin v1.0
+      </div>
+    </aside>
+
+    <!-- Top Navbar -->
+    <nav id="top-navbar">
+      <div class="navbar-left">
+        <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">&#9776;</button>
+        <span id="page-title" class="page-title">Dashboard</span>
+      </div>
+      <div class="navbar-right">
+        <span class="admin-name">Hello, <strong id="admin-name">Admin</strong></span>
+        <button class="btn-logout" onclick="logout()">Logout</button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="main-wrapper">
+      <div id="app-content">
+        <!-- Content injected by JS -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- App Script -->
+  <script src="admin.js"></script>
+
+</body>
+</html>

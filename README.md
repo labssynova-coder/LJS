@@ -8,9 +8,12 @@ A modern, elegant e-commerce website for jewelry built with **Django 4.2**, feat
 
 ## 🌐 Live Demo
 
-[**🛍️ View Storefront Demo**](https://labssynova-coder.github.io/LJS/) — static showcase with all screenshots
+| Demo | URL | Description |
+|------|-----|-------------|
+| 🛍️ **Storefront** | [labssynova-coder.github.io/LJS/](https://labssynova-coder.github.io/LJS/) | Browse products, cart, search — fully interactive with mock data |
+| ⚙️ **Admin Panel** | [labssynova-coder.github.io/LJS/admin/](https://labssynova-coder.github.io/LJS/admin/) | Dashboard, products, orders, categories — demo mode, no login needed |
 
-[**⚙️ View Admin Panel**](https://labssynova-coder.github.io/LJS/) — same page, scroll to admin section
+> Both demos work entirely in the browser with embedded mock data. No backend required.
 
 ---
 
@@ -103,17 +106,11 @@ The golden accent (`#dcb14a`) is applied to:
   </tr>
   <tr>
     <td align="center"><b>Search Results</b></td>
-    <td align="center"><b>Category Products</b></td>
+    <td align="center"><b>Shopping Cart</b></td>
   </tr>
   <tr>
     <td><img src="docs/demo/07-search.png" width="480"></td>
-    <td><img src="docs/demo/08-category-products.png" width="480"></td>
-  </tr>
-  <tr>
-    <td align="center" colspan="2"><b>Shopping Cart</b></td>
-  </tr>
-  <tr>
-    <td colspan="2" align="center"><img src="docs/demo/09-cart.png" width="480"></td>
+    <td><img src="docs/demo/09-cart.png" width="480"></td>
   </tr>
 </table>
 
