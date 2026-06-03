@@ -6,6 +6,17 @@ A modern, elegant e-commerce website for jewelry built with **Django 4.2**, feat
 
 ---
 
+## 🌐 Live Demos
+
+| Demo | URL | Credentials |
+|------|-----|-------------|
+| 🛍️ **Storefront** | [ljs-storefront.onrender.com](https://ljs-storefront.onrender.com) | Browse freely |
+| ⚙️ **Admin Panel** | [ljs-admin.onrender.com/admin](https://ljs-admin.onrender.com/admin) | `admin` / `admin123` |
+
+> ⚠️ Live demos are hosted on Render's free tier — first visit may take ~30s to wake up.
+
+---
+
 ## ✨ Features
 
 ### Storefront
@@ -66,23 +77,69 @@ The golden accent (`#dcb14a`) is applied to:
 
 ## 📸 Screenshots
 
-### Homepage
-![Homepage](screenshots/01-homepage.png)
+### 🛍️ Storefront
 
-### Shop Page
-![Shop](screenshots/02-shop.png)
+<table>
+  <tr>
+    <td align="center"><b>Homepage</b></td>
+    <td align="center"><b>Shop</b></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/01-homepage.png" width="480"></td>
+    <td><img src="screenshots/02-shop.png" width="480"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Categories</b></td>
+    <td align="center"><b>Product Detail</b></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/03-categories.png" width="480"></td>
+    <td><img src="screenshots/04-product-detail.png" width="480"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Login</b></td>
+    <td align="center"><b>Register</b></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/05-login.png" width="480"></td>
+    <td><img src="screenshots/06-register.png" width="480"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Search Results</b></td>
+    <td align="center"><b>Category Products</b></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/07-search.png" width="480"></td>
+    <td><img src="screenshots/08-category-products.png" width="480"></td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2"><b>Shopping Cart</b></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><img src="screenshots/09-cart.png" width="480"></td>
+  </tr>
+</table>
 
-### Categories
-![Categories](screenshots/03-categories.png)
+### ⚙️ Admin Panel
 
-### Product Detail
-![Product Detail](screenshots/07-product-detail.png)
-
-### Login
-![Login](screenshots/05-login.png)
-
-### Cart
-![Cart](screenshots/09-cart.png)
+<table>
+  <tr>
+    <td align="center"><b>Dashboard</b></td>
+    <td align="center"><b>Products</b></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/09-admin-dashboard.png" width="480"></td>
+    <td><img src="screenshots/10-admin-products.png" width="480"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Categories</b></td>
+    <td align="center"><b>Orders</b></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/11-admin-categories.png" width="480"></td>
+    <td><img src="screenshots/12-admin-orders.png" width="480"></td>
+  </tr>
+</table>
 
 ---
 
@@ -116,7 +173,7 @@ cp .env.example .env
 ```bash
 python manage.py migrate
 python manage.py createsuperuser
-python manage.py loaddata fixtures/demo_data.json   # optional: demo products & categories
+python manage.py loaddata store/fixtures/demo_data.json   # optional: demo products & categories
 ```
 
 ### 4. Run
@@ -131,7 +188,7 @@ python manage.py runserver
 ## 📁 Project Structure
 
 ```
-django-jewelry-shop/
+LJS/
 ├── jewelryshop/          # Django project settings
 │   ├── settings.py
 │   ├── urls.py
@@ -154,6 +211,7 @@ django-jewelry-shop/
 │   ├── store/            # index, shop, detail, cart, checkout, orders, search
 │   ├── account/          # register, login, profile, address, password reset
 │   └── partials/         # _hero_breadcrumb, _add_to_cart_btn, _product_image
+├── screenshots/          # App screenshots for README
 ├── media/                # User-uploaded images (gitignored)
 ├── .env.example
 ├── requirements.txt
@@ -177,6 +235,20 @@ python manage.py test store -v 2
 | `Django>=4.2,<5.0` | Web framework |
 | `Pillow>=10.0` | Image handling |
 | `django-jazzmin>=3.0` | Admin theme |
+| `gunicorn>=21.0` | Production WSGI server |
+
+---
+
+## 🚢 Deploy to Render
+
+This project is ready to deploy on [Render](https://render.com):
+
+1. Fork or clone this repo
+2. Create a new **Web Service** on Render
+3. Set **Build Command**: `pip install -r requirements.txt && python manage.py migrate && python manage.py loaddata store/fixtures/demo_data.json`
+4. Set **Start Command**: `gunicorn jewelryshop.wsgi:application`
+5. Add environment variable `DJANGO_SECRET_KEY`
+6. Set `DJANGO_DEBUG=False` for production
 
 ---
 

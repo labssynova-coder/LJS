@@ -17,8 +17,9 @@ static/
 node_modules/
 package-lock.json
 
-# Screenshots (generated)
-screenshots/
+# Screenshot scripts (dev only)
+take_*screenshot*.mjs
+take_*screenshot*.js
 
 # IDE / OS
 .DS_Store
