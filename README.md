@@ -1,8 +1,8 @@
-# 💎 Django Jewelry Shop
+# 💎 LJS — Luxury Jewelry Shop
 
 A modern, elegant e-commerce website for jewelry built with **Django 4.2**, featuring a white/black/golden theme, a polished admin panel, and a complete storefront experience.
 
-> Fork of [vijaythapa333/django-jewelry-shop](https://github.com/vijaythapa333/django-jewelry-shop) — reimagined with security hardening, UI/UX overhaul, and a cohesive golden theme across storefront and admin.
+> Inspired by [vijaythapa333/django-jewelry-shop](https://github.com/vijaythapa333/django-jewelry-shop) — reimagined with security hardening, UI/UX overhaul, and a cohesive golden theme across storefront and admin.
 
 ---
 
@@ -94,8 +94,8 @@ The golden accent (`#dcb14a`) is applied to:
 
 ### 1. Clone & Setup
 ```bash
-git clone https://github.com/labssynova-coder/django-jewelry-shop.git
-cd django-jewelry-shop
+git clone https://github.com/labssynova-coder/LJS.git
+cd LJS
 
 python -m venv .venv
 # Windows:
