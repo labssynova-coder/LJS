@@ -83,7 +83,15 @@
                   <div class="col-lg-6 mb-2 mb-lg-0">
                     <p class="text-small text-muted mb-0">Showing {{ products.start_index }}–{{ products.end_index }} of {{ products.paginator.count }} results</p>
                   </div>
-                  <div class="col-lg-6">
+                  <div class="col-lg-6 d-flex align-items-center justify-content-lg-end">
+                    <a class="text-reset mr-3" href="#"><i class="fas fa-th-large"></i></a>
+                    <a class="text-reset mr-3" href="#"><i class="fas fa-th"></i></a>
+                    <select class="selectpicker ml-auto" data-style="btn-secondary btn-sm" data-width="auto">
+                      <option value="0">Default Sorting</option>
+                      <option value="1">Popularity</option>
+                      <option value="2">Price: Low to High</option>
+                      <option value="3">Price: High to Low</option>
+                    </select>
                   </div>
                 </div>
 
@@ -96,9 +104,13 @@
                       <div class="col-lg-4 col-sm-6">
                         <div class="product text-center">
                           <div class="mb-3 position-relative">
-
+                            <div class="badge text-white badge-"></div>
                             <a class="d-block" href="{% url 'store:product-detail' product.slug %}">
-                              {% include 'partials/_product_image.html' with product=product %}
+                              {% if product.product_image %}
+                                <img class="img-fluid w-100" src="{{ product.product_image.url }}" alt="{{ product.title }}">
+                              {% else %}
+                                <img class="img-fluid w-100" src="{% static 'img/product-1.jpg' %}" alt="{{ product.title }}">
+                              {% endif %}
                             </a>
 
                             <div class="product-overlay">
@@ -107,6 +119,7 @@
                                 <li class="list-inline-item m-0 p-0">
                                   {% include 'partials/_add_to_cart_btn.html' with product=product %}
                                 </li>
+                                <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="{% url 'store:product-detail' product.slug %}" aria-label="View details"><i class="fas fa-expand"></i></a></li>
                               </ul>
                             </div>
                           </div>

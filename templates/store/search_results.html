@@ -20,12 +20,19 @@
                 <div class="col-xl-3 col-lg-4 col-sm-6">
                   <div class="product text-center">
                     <div class="position-relative mb-3">
+                      <div class="badge text-white badge-"></div>
                       <a class="d-block" href="{% url 'store:product-detail' product.slug %}">
-                        {% include 'partials/_product_image.html' with product=product %}
+                        {% if product.product_image %}
+                          <img class="img-fluid w-100" src="{{ product.product_image.url }}" alt="{{ product.title }}">
+                        {% else %}
+                          <img class="img-fluid w-100" src="{% static 'img/product-1.jpg' %}" alt="{{ product.title }}">
+                        {% endif %}
                       </a>
                       <div class="product-overlay">
                         <ul class="mb-0 list-inline">
+                          <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#" aria-label="Add to wishlist"><i class="far fa-heart"></i></a></li>
                           <li class="list-inline-item m-0 p-0">{% include 'partials/_add_to_cart_btn.html' with product=product %}</li>
+                          <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="{% url 'store:product-detail' product.slug %}" aria-label="View details"><i class="fas fa-expand"></i></a></li>
                         </ul>
                       </div>
                     </div>

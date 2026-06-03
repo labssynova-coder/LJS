@@ -11,12 +11,6 @@
                 <li class="nav-item">
                   <!-- Link--><a class="nav-link" href="{% url 'store:home' %}">Home</a>
                 </li>
-                <li class="nav-item">
-                  <form class="form-inline" method="get" action="{% url 'store:search' %}">
-                    <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search products..." aria-label="Search">
-                    <button class="btn btn-outline-dark btn-sm" type="submit">Search</button>
-                  </form>
-                </li>
                 <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Categories</a>
                   <div class="dropdown-menu mt-3" aria-labelledby="pagesDropdown">
                     {% if categories_menu %}
@@ -29,7 +23,7 @@
                   </div>
                 </li>
                 <li class="nav-item">
-                  <!-- Link--><a class="nav-link" href="{% url 'store:shop' %}">Shop</a>
+                  <!-- Link--><a class="nav-link" href="{% url 'store:home' %}">Blog</a>
                 </li>
                 <li class="nav-item">
                   <!-- Link--><a class="nav-link" href="{% url 'store:contact' %}">Contact</a>

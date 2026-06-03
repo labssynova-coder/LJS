@@ -125,14 +125,20 @@
                 <div class="col-lg-3 col-sm-6">
                   <div class="product text-center skel-loader">
                     <div class="d-block mb-3 position-relative">
+                      <div class="badge text-white badge-"></div>
                       <a class="d-block" href="{% url 'store:product-detail' rp.slug %}">
-                        {% include 'partials/_product_image.html' with product=rp %}
+                        {% if rp.product_image %}
+                          <img class="img-fluid w-100" src="{{rp.product_image.url}}" alt="{{rp.title}}">
+                        {% else %}
+                          <img class="img-fluid w-100" src="{% static 'img/product-1.jpg' %}" alt="{{rp.title}}">
+                        {% endif %}
                       </a>
 
                       <div class="product-overlay">
                         <ul class="mb-0 list-inline">
-                          <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#"><i class="far fa-heart"></i></a></li>
+                          <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#" aria-label="Add to wishlist"><i class="far fa-heart"></i></a></li>
                           <li class="list-inline-item m-0 p-0">{% include 'partials/_add_to_cart_btn.html' with product=rp %}</li>
+                          <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="{% url 'store:product-detail' rp.slug %}" aria-label="View details"><i class="fas fa-expand"></i></a></li>
                         </ul>
                       </div>
                     </div>
