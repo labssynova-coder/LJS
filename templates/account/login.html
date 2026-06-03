@@ -3,54 +3,58 @@
 
     {% block content %}
 
-      <div class="container py-5">
-        <div class="col-md-8 offset-2">
+      <div class="container">
+        {% url 'store:home' as home_url %}
+        {% include 'partials/_hero_breadcrumb.html' with title="Login" bc1_url=home_url bc1_label="Home" bc2_label="Login" %}
 
-        <h1 class="mb-5">Log In to Your Account</h1>
-        
-        
-        <div class="card mb-4" id="forms">
-          
-          <div class="card-body">
-              
-            {% include 'partials/_messages.html' %}
+        <section class="py-5">
+          <div class="col-md-8 offset-md-2">
 
-            <form method="post" action="">
-              <fieldset>
-                {% csrf_token %}
+          <div class="card border-0 rounded-0 mb-4" id="forms">
+            <div class="card-header bg-dark text-white text-uppercase small font-weight-bold py-3">
+              Log In to Your Account
+            </div>
+            <div class="card-body p-lg-4">
 
-                {% for fm in form %}
-                    <div class="form-group">
-                        {{fm.label_tag}}
-                        {{fm}}
-                        <small class="text-danger">{{fm.errors|striptags}}</small>
-                    </div>
-                {% endfor %}
-                <button class="btn btn-primary" type="submit">Login</button>
-              </fieldset>
+              {% include 'partials/_messages.html' %}
 
-              {% if form.non_field_errors %}
-                {% for error in form.non_field_errors %}
-                    <p class="alert alert-danger my-3">
-                        {{error}}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </p>
-                {% endfor %}
-              {% endif %}
+              <form method="post" action="">
+                <fieldset>
+                  {% csrf_token %}
+
+                  {% for fm in form %}
+                      <div class="form-group">
+                          <label class="text-small text-uppercase" for="{{ fm.id_for_label }}">{{ fm.label }}</label>
+                          {{ fm }}
+                          <small class="text-danger">{{fm.errors|striptags}}</small>
+                      </div>
+                  {% endfor %}
+                  <button class="btn btn-dark btn-lg" type="submit">Login</button>
+                </fieldset>
+
+                {% if form.non_field_errors %}
+                  {% for error in form.non_field_errors %}
+                      <p class="alert alert-danger my-3">
+                          {{error}}
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </p>
+                  {% endfor %}
+                {% endif %}
 
 
-            </form>
+              </form>
 
-            <hr>
+              <hr>
 
-            Forgot Password? <a href="{% url 'store:password-reset' %}">Reset Now</a> <br>
-            New Member? <a href="{% url 'store:register' %}">Create an Account</a> 
-            
+              <p class="mb-1">Forgot Password? <a href="{% url 'store:password-reset' %}">Reset Now</a></p>
+              <p class="mb-0">New Member? <a href="{% url 'store:register' %}">Create an Account</a></p>
+
+            </div>
           </div>
-        </div>
 
-        </div>       
+          </div>
+        </section>
       </div>
 {% endblock content %}

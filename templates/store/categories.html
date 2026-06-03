@@ -5,6 +5,8 @@
 
       <!-- HERO SECTION-->
       <div class="container">
+        {% url 'store:home' as home_url %}
+        {% include 'partials/_hero_breadcrumb.html' with title="Categories" bc1_url=home_url bc1_label="Home" bc2_label="Categories" %}
 
         <!-- CATEGORIES SECTION-->
         <section class="pt-5">

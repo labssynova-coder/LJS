@@ -4,90 +4,107 @@
 
     {% block content %}
 
-      <div class="container py-5">
-        {% include 'partials/_messages.html' %}
+      <div class="container">
+        {% url 'store:home' as home_url %}
+        {% include 'partials/_hero_breadcrumb.html' with title="My Account" bc1_url=home_url bc1_label="Home" bc2_label="Profile" %}
 
-        <div class="jumbotron">
-          <h1>{{request.user.first_name}} {{request.user.last_name}}</h1>
-          <p><strong>Email:</strong> {{request.user.email}}</p>
-          <p><strong>Username:</strong> {{request.user.username}}</p>
-          <p><a class="btn btn-primary btn-large" href="{% url 'store:add-address' %}">Add Address »</a> <a class="btn btn-outline-primary btn-large" href="{% url 'store:orders' %}">My Orders »</a></p>
-        </div>
+        <section class="py-5">
+          {% include 'partials/_messages.html' %}
 
-
-        <div class="row">
-
-          <div class="col-lg-6">
-            <div class="card mb-4" id="headings">
-              <div class="card-header">Addresses <span class="float-right"><a href="{% url 'store:add-address' %}">Add Address</a></span></div>
-              <div class="card-body">
-                {% if addresses %}
-                    {% for address in addresses %}
-                        <h4 class="mb-3">Address {{forloop.counter}}</h4> 
-                        
-                        <span class="float-right"><form method="post" action="{% url 'store:remove-address' address.id %}" style="display:inline">{% csrf_token %}<button type="submit" style="border:none;background:none;cursor:pointer;padding:0" aria-label="Remove address"><i class="fas fa-trash-alt small text-muted"></i></button></form></span>
-
-                        <p>
-                            <strong>Locality: </strong>{{address.locality}} <br>
-                            <strong>City: </strong>{{address.city}} <br>
-                            <strong>State: </strong>{{address.state}} <br>
-                            {% if address.phone %}<strong>Phone: </strong>{{address.phone}} <br>{% endif %}
-                        </p>
-
-                        <hr>
-                    {% endfor %}
-                {% else %}
-                <div class="text-danger">
-                  Address not Added.
+          <!-- USER INFO CARD -->
+          <div class="card border-0 rounded-0 bg-light p-lg-4 mb-4">
+            <div class="card-body">
+              <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between">
+                <div>
+                  <h2 class="h5 text-uppercase mb-1">{{request.user.first_name}} {{request.user.last_name}}</h2>
+                  <p class="text-muted text-small mb-0"><strong>Email:</strong> {{request.user.email}} &nbsp; <strong>Username:</strong> {{request.user.username}}</p>
                 </div>
-                {% endif %}
-                
+                <div class="mt-3 mt-md-0">
+                  <a class="btn btn-dark btn-lg" href="{% url 'store:add-address' %}">Add Address</a>
+                  <a class="btn btn-outline-dark btn-lg" href="{% url 'store:orders' %}">My Orders</a>
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="col-lg-6">
-            <div class="card mb-4" id="tables">
-              <div class="card-header">Orders</div>
-              <div class="card-body">
-                <table class="table table-hover">
-                  <thead>
-                    <tr>
-                      <th>Order #</th>
-                      <th>Date</th>
-                      <th>Items</th>
-                      <th>Total</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% if orders %}
-                      {% for order in orders %}
-                        <tr>
-                          <td><a href="{% url 'store:order-detail' order.id %}">#{{order.id}}</a></td>
-                          <td>{{order.ordered_date|date:"M d, Y"}}</td>
-                          <td>{{order.items.count}} item{{order.items.count|pluralize}}</td>
-                          <td>${{order.total_amount|intcomma}}</td>
-                          <td>{{order.status}}</td>
-                        </tr>
+          <div class="row">
+
+            <!-- ADDRESSES -->
+            <div class="col-lg-6">
+              <div class="card border-0 rounded-0 mb-4">
+                <div class="card-header bg-dark text-white text-uppercase small font-weight-bold py-3">
+                  Addresses
+                  <span class="float-right"><a class="text-white reset-anchor" href="{% url 'store:add-address' %}">+ Add</a></span>
+                </div>
+                <div class="card-body">
+                  {% if addresses %}
+                      {% for address in addresses %}
+                          <h6 class="text-uppercase mb-3">Address {{forloop.counter}}</h6>
+
+                          <span class="float-right">
+                            <form method="post" action="{% url 'store:remove-address' address.id %}" style="display:inline">
+                              {% csrf_token %}
+                              <button type="submit" style="border:none;background:none;cursor:pointer;padding:0" aria-label="Remove address"><i class="fas fa-trash-alt small text-muted"></i></button>
+                            </form>
+                          </span>
+
+                          <p class="text-small">
+                              <strong>Locality:</strong> {{address.locality}}<br>
+                              <strong>City:</strong> {{address.city}}<br>
+                              <strong>State:</strong> {{address.state}}<br>
+                              {% if address.phone %}<strong>Phone:</strong> {{address.phone}}<br>{% endif %}
+                          </p>
+
+                          <hr>
                       {% endfor %}
-                    {% else %}
-                    <tr>
-                      <td class="text-danger" colspan="5">You haven't placed any orders yet.</td>
-                    </tr>
-                    {% endif %}
-                    
-                    
-                  </tbody>
-                </table>
-                
+                  {% else %}
+                  <p class="text-danger mb-0">No addresses added yet.</p>
+                  {% endif %}
+
+                </div>
               </div>
             </div>
+
+            <!-- ORDERS -->
+            <div class="col-lg-6">
+              <div class="card border-0 rounded-0 mb-4">
+                <div class="card-header bg-dark text-white text-uppercase small font-weight-bold py-3">
+                  Recent Orders
+                </div>
+                <div class="card-body">
+                  <table class="table table-hover table-sm">
+                    <thead class="bg-light">
+                      <tr>
+                        <th class="text-small text-uppercase border-0">Order #</th>
+                        <th class="text-small text-uppercase border-0">Date</th>
+                        <th class="text-small text-uppercase border-0">Total</th>
+                        <th class="text-small text-uppercase border-0">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if orders %}
+                        {% for order in orders %}
+                          <tr>
+                            <td><a class="reset-anchor" href="{% url 'store:order-detail' order.id %}">#{{order.id}}</a></td>
+                            <td class="text-small">{{order.ordered_date|date:"M d, Y"}}</td>
+                            <td>${{order.total_amount|intcomma}}</td>
+                            <td>{{order.status}}</td>
+                          </tr>
+                        {% endfor %}
+                      {% else %}
+                      <tr>
+                        <td class="text-danger" colspan="4">No orders yet.</td>
+                      </tr>
+                      {% endif %}
+                    </tbody>
+                  </table>
+
+                </div>
+              </div>
+            </div>
+
           </div>
-          
-        </div>
-    
-        
-        
+
+        </section>
       </div>
 {% endblock content %}
