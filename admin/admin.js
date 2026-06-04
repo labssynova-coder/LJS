@@ -267,7 +267,10 @@ function autoLogin() {
   if (loginScreen) loginScreen.style.display = 'none';
   if (appScreen) appScreen.classList.add('active');
   if (adminName) adminName.textContent = 'Admin User';
-  navigateTo(window.location.hash || '#/');
+  var hash = window.location.hash || '#/';
+  window.location.hash = hash;
+  // Always call handleRoute directly — if hash is already set, hashchange won't fire
+  handleRoute();
 }
 
 function handleLogin(e) {
