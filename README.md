@@ -10,8 +10,8 @@ A modern, elegant e-commerce website for jewelry built with **Django 4.2**, feat
 
 | Demo | URL | Description |
 |------|-----|-------------|
-| 🛍️ **Storefront** | [www.synovalabs.tech](https://www.synovalabs.tech/) | Static live demo: browse products, cart, search, wishlist, account, and policy pages with mock data |
-| ⚙️ **Admin Panel** | [www.synovalabs.tech/admin/](https://www.synovalabs.tech/admin/) | Static admin demo: dashboard, products, orders, categories — no login needed |
+| 🛍️ **Storefront** | [labssynova-coder.github.io/LJS/](https://labssynova-coder.github.io/LJS/) | Browse products, cart, search, wishlist, account, and policy pages — fully interactive with mock data |
+| ⚙️ **Admin Panel** | [labssynova-coder.github.io/LJS/admin/](https://labssynova-coder.github.io/LJS/admin/) | Dashboard, products, orders, categories — demo mode, no login needed |
 
 > The public demo works entirely in the browser with embedded mock data. The Django backend is the production-capable app for real accounts, carts, checkout, orders, and admin management.
 
@@ -298,7 +298,7 @@ python manage.py test store -v 2
 ## 🚢 Deployment
 
 ### GitHub Pages (Demo)
-The `public/` directory contains a static showcase page that can be hosted at `https://www.synovalabs.tech/`. The included GitHub Pages workflow can still deploy the same static demo if that is your preferred static host.
+The `public/` directory contains a static showcase page. Pushing to `main` automatically deploys it via GitHub Actions to `https://labssynova-coder.github.io/LJS/`.
 
 ### Render / Railway (Production)
 For a live Django deployment:
