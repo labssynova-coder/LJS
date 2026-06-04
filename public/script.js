@@ -1162,7 +1162,7 @@ function toggleCartDrawer() {
 /* ---- Router ---- */
 function parseHash() {
   var hash = window.location.hash || "#/";
-  var parts = hash.substring(2).split("?");
+  var parts = hash.substring(1).split("?");
   var path = parts[0];
   var queryStr = parts[1] || "";
   var params = {};
