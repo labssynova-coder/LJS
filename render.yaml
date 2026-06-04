@@ -10,6 +10,10 @@ services:
       - key: DJANGO_DEBUG
         value: "False"
       - key: DJANGO_ALLOWED_HOSTS
-        value: ".onrender.com"
+        value: ".onrender.com,synovalabs.tech,www.synovalabs.tech"
+      - key: DJANGO_CSRF_TRUSTED_ORIGINS
+        value: "https://synovalabs.tech,https://www.synovalabs.tech"
+      - key: PAYPAL_CLIENT_ID
+        value: ""
       - key: PYTHON_VERSION
         value: "3.12.0"

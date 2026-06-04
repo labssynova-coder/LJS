@@ -13,9 +13,16 @@ from store.models import Address, Cart, Category, Order, OrderItem, Product
 from .forms import RegistrationForm, AddressForm
 
 
+def storefront_products():
+    return Product.objects.filter(
+        is_active=True,
+        category__is_active=True,
+    ).exclude(product_image='')
+
+
 def home(request):
-    products = Product.objects.filter(is_active=True).exclude(product_image='').select_related('category')[:8]
-    featured_products = Product.objects.filter(is_active=True, is_featured=True).exclude(product_image='').select_related('category')[:4]
+    products = storefront_products().select_related('category')[:8]
+    featured_products = storefront_products().filter(is_featured=True).select_related('category')[:4]
     categories = Category.objects.filter(is_active=True, is_featured=True).only('title', 'slug', 'category_image')
     if not categories.exists():
         categories = Category.objects.filter(is_active=True).only('title', 'slug', 'category_image')
@@ -32,8 +39,8 @@ def contact(request):
 
 
 def detail(request, slug):
-    product = get_object_or_404(Product.objects.select_related('category'), slug=slug, is_active=True)
-    related_products = Product.objects.exclude(id=product.id).filter(is_active=True, category=product.category).exclude(product_image='')[:4]
+    product = get_object_or_404(storefront_products().select_related('category'), slug=slug)
+    related_products = storefront_products().exclude(id=product.id).filter(category=product.category)[:4]
     context = {
         'product': product,
         'related_products': related_products,
@@ -47,8 +54,8 @@ def all_categories(request):
 
 
 def category_products(request, slug):
-    category = get_object_or_404(Category, slug=slug)
-    product_list = Product.objects.filter(is_active=True, category=category).exclude(product_image='').select_related('category')
+    category = get_object_or_404(Category, slug=slug, is_active=True)
+    product_list = storefront_products().filter(category=category).select_related('category')
     paginator = Paginator(product_list, 12)
     page_number = request.GET.get('page')
     products = paginator.get_page(page_number)
@@ -62,7 +69,7 @@ def category_products(request, slug):
 def search(request):
     query = request.GET.get('q', '')
     if query:
-        product_list = Product.objects.filter(is_active=True, title__icontains=query).exclude(product_image='').select_related('category')
+        product_list = storefront_products().filter(title__icontains=query).select_related('category')
     else:
         product_list = Product.objects.none()
     paginator = Paginator(product_list, 12)
@@ -126,7 +133,7 @@ def remove_address(request, address_id):
 def add_to_cart(request):
     user = request.user
     product_id = request.POST.get('prod_id')
-    product = get_object_or_404(Product, id=product_id)
+    product = get_object_or_404(Product, id=product_id, is_active=True, category__is_active=True)
     cart_item, created = Cart.objects.get_or_create(product=product, user=user)
     if not created:
         cart_item.quantity += 1
@@ -204,6 +211,7 @@ def checkout(request):
             'shipping_amount': shipping_amount,
             'total_amount': total_amount,
             'addresses': addresses,
+            'paypal_client_id': getattr(settings, 'PAYPAL_CLIENT_ID', ''),
         }
         return render(request, 'store/checkout.html', context)
 
@@ -259,7 +267,7 @@ def server_error(request):
 
 
 def shop(request):
-    product_list = Product.objects.filter(is_active=True).exclude(product_image='').select_related('category').order_by('-created_at')
+    product_list = storefront_products().select_related('category').order_by('-created_at')
     paginator = Paginator(product_list, 12)
     page_number = request.GET.get('page')
     products = paginator.get_page(page_number)

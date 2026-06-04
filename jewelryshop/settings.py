@@ -4,6 +4,7 @@ from decimal import Decimal
 from pathlib import Path
 
 import os
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,9 +20,16 @@ SECRET_KEY = os.environ.get(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() in ('true', '1', 'yes')
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.environ.get(
+    'DJANGO_ALLOWED_HOSTS',
+    'localhost,127.0.0.1,synovalabs.tech,www.synovalabs.tech'
+).split(',')
+CSRF_TRUSTED_ORIGINS = os.environ.get(
+    'DJANGO_CSRF_TRUSTED_ORIGINS',
+    'https://synovalabs.tech,https://www.synovalabs.tech'
+).split(',')
 
 
 # Application definition
@@ -134,8 +142,10 @@ EMAIL_BACKEND = os.environ.get(
     'django.core.mail.backends.console.EmailBackend'
 )
 
+IS_TESTING = 'test' in sys.argv
+
 # Production security settings
-if not DEBUG:
+if not DEBUG and not IS_TESTING:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
@@ -157,6 +167,7 @@ HANDLER500 = 'store.views.server_error'
 LOGIN_URL = 'store:login'
 
 DEFAULT_SHIPPING_FEE = Decimal('10')
+PAYPAL_CLIENT_ID = os.environ.get('PAYPAL_CLIENT_ID', '')
 
 # Jazzmin Admin Configuration
 JAZZMIN_SETTINGS = {

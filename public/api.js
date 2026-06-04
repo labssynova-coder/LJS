@@ -198,7 +198,7 @@ const FALLBACK_PRODUCTS = [
     price: 1999,
     category: "Rings",
     categorySlug: "rings",
-    image: "assets/images/products/Platinum-Ring-with-Diamonds.jpg",
+    image: "assets/images/products/platinum-ring-with-diamonds.jpg",
     shortDescription: "Exquisite platinum ring encrusted with diamonds — the ultimate symbol of prestige.",
     isFeatured: true
   },

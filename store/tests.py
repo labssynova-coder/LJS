@@ -750,6 +750,19 @@ class InactiveProductTests(TestCase):
             category=cls.category,
             is_active=False,
         )
+        cls.inactive_category = Category.objects.create(
+            title='Archived Watches', slug='archived-watches', is_active=False
+        )
+        cls.active_product_in_inactive_category = Product.objects.create(
+            title='Archived Watch',
+            slug='archived-watch',
+            sku='ARW-001',
+            short_description='Hidden by category',
+            price=Decimal('399.99'),
+            category=cls.inactive_category,
+            is_active=True,
+            product_image=_tiny_jpeg('archived.jpg'),
+        )
 
     def test_home_excludes_inactive(self):
         """Home page context should not include inactive products."""
@@ -768,6 +781,7 @@ class InactiveProductTests(TestCase):
         product_ids = [p.id for p in response.context['products'].object_list]
         self.assertIn(self.active_product.id, product_ids)
         self.assertNotIn(self.inactive_product.id, product_ids)
+        self.assertNotIn(self.active_product_in_inactive_category.id, product_ids)
 
     def test_search_excludes_inactive(self):
         """Search should not find inactive products."""
@@ -777,6 +791,37 @@ class InactiveProductTests(TestCase):
         product_ids = [p.id for p in response.context['products'].object_list]
         self.assertIn(self.active_product.id, product_ids)
         self.assertNotIn(self.inactive_product.id, product_ids)
+        self.assertNotIn(self.active_product_in_inactive_category.id, product_ids)
+
+    def test_inactive_category_page_returns_404(self):
+        """Inactive category pages should not be publicly browsable."""
+        url = reverse('store:category-products', kwargs={'slug': self.inactive_category.slug})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_product_in_inactive_category_detail_returns_404(self):
+        """Active products hidden by an inactive category should not be visible."""
+        url = reverse('store:product-detail', kwargs={'slug': self.active_product_in_inactive_category.slug})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_add_to_cart_rejects_inactive_product(self):
+        """Inactive products should not be purchasable by posting their ID."""
+        user = User.objects.create_user(username='inactive-cart', password='pass12345')
+        self.client.login(username='inactive-cart', password='pass12345')
+        url = reverse('store:add-to-cart')
+        response = self.client.post(url, {'prod_id': self.inactive_product.id})
+        self.assertEqual(response.status_code, 404)
+        self.assertFalse(Cart.objects.filter(user=user, product=self.inactive_product).exists())
+
+    def test_add_to_cart_rejects_product_in_inactive_category(self):
+        """Products in inactive categories should not be purchasable by ID."""
+        user = User.objects.create_user(username='inactive-cat-cart', password='pass12345')
+        self.client.login(username='inactive-cat-cart', password='pass12345')
+        url = reverse('store:add-to-cart')
+        response = self.client.post(url, {'prod_id': self.active_product_in_inactive_category.id})
+        self.assertEqual(response.status_code, 404)
+        self.assertFalse(Cart.objects.filter(user=user, product=self.active_product_in_inactive_category).exists())
 
 
 class ShippingFeeTests(TestCase):

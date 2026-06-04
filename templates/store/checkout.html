@@ -36,11 +36,12 @@
                 </div>
               </form>
 
-              <!-- PayPal button container -->
+              {% if paypal_client_id %}
               <div class="mt-4">
                 <h6 class="text-uppercase mb-3">Or pay with PayPal</h6>
                 <div id="paypal-button-container"></div>
               </div>
+              {% endif %}
             </div>
 
             <!-- ORDER SUMMARY-->
@@ -79,8 +80,8 @@
       {% endblock content %}
 
       {% block payment-gateway %}
-        <!-- Include the PayPal JavaScript SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=YOUR-PAYPAL-CLIENT-ID&currency=USD"></script>
+      {% if paypal_client_id %}
+    <script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id|urlencode }}&currency=USD"></script>
 
     <script>
         // Render the PayPal button into #paypal-button-container
@@ -110,4 +111,5 @@
 
         }).render('#paypal-button-container');
     </script>
+      {% endif %}
       {% endblock payment-gateway %}

@@ -10,10 +10,10 @@ A modern, elegant e-commerce website for jewelry built with **Django 4.2**, feat
 
 | Demo | URL | Description |
 |------|-----|-------------|
-| 🛍️ **Storefront** | [labssynova-coder.github.io/LJS/](https://labssynova-coder.github.io/LJS/) | Browse products, cart, search — fully interactive with mock data |
-| ⚙️ **Admin Panel** | [labssynova-coder.github.io/LJS/admin/](https://labssynova-coder.github.io/LJS/admin/) | Dashboard, products, orders, categories — demo mode, no login needed |
+| 🛍️ **Storefront** | [www.synovalabs.tech](https://www.synovalabs.tech/) | Static live demo: browse products, cart, search, wishlist, account, and policy pages with mock data |
+| ⚙️ **Admin Panel** | [www.synovalabs.tech/admin/](https://www.synovalabs.tech/admin/) | Static admin demo: dashboard, products, orders, categories — no login needed |
 
-> Both demos work entirely in the browser with embedded mock data. No backend required.
+> The public demo works entirely in the browser with embedded mock data. The Django backend is the production-capable app for real accounts, carts, checkout, orders, and admin management.
 
 ---
 
@@ -24,12 +24,12 @@ A modern, elegant e-commerce website for jewelry built with **Django 4.2**, feat
 - **Product catalog** — browse by category, search, or view all products
 - **Product detail pages** — image lightbox, descriptions, reviews, related products
 - **Shopping cart** — add/remove items, quantity controls, shipping calculation
-- **Wishlist** — save favorite items, heart icon toggle, dedicated wishlist page
-- **Blog** — jewelry guides, trends, and care tips
-- **My Account** — simulated profile, order history, address book
+- **Wishlist** — save favorite items, heart icon toggle, dedicated wishlist page in the static demo
+- **Blog** — jewelry guides, trends, and care tips in the static demo
+- **My Account** — simulated profile, order history, address book in the static demo
 - **User accounts** — register, login, profile management, address book, order history
 - **Search** — real-time product search with pagination
-- **Policy pages** — Terms & Conditions, Privacy Policy, Returns & Refunds, Shipping Info
+- **Policy pages** — Terms & Conditions, Privacy Policy, Returns & Refunds, Shipping Info in the static demo
 
 ### Admin Panel (Jazzmin)
 - **Dark navy sidebar** with golden accent theme matching the storefront
@@ -298,7 +298,7 @@ python manage.py test store -v 2
 ## 🚢 Deployment
 
 ### GitHub Pages (Demo)
-The `public/` directory contains a static showcase page. Pushing to `main` automatically deploys it via GitHub Actions to `https://labssynova-coder.github.io/LJS/`.
+The `public/` directory contains a static showcase page that can be hosted at `https://www.synovalabs.tech/`. The included GitHub Pages workflow can still deploy the same static demo if that is your preferred static host.
 
 ### Render / Railway (Production)
 For a live Django deployment:
@@ -306,7 +306,7 @@ For a live Django deployment:
 pip install gunicorn
 gunicorn jewelryshop.wsgi:application
 ```
-Set environment variables: `DJANGO_SECRET_KEY`, `DJANGO_DEBUG=False`, `DJANGO_ALLOWED_HOSTS=yourdomain.com`
+Set environment variables: `DJANGO_SECRET_KEY`, `DJANGO_DEBUG=False`, `DJANGO_ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com`, and `DJANGO_CSRF_TRUSTED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com`.
 
 ---
 
