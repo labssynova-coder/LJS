@@ -24,8 +24,12 @@ A modern, elegant e-commerce website for jewelry built with **Django 4.2**, feat
 - **Product catalog** — browse by category, search, or view all products
 - **Product detail pages** — image lightbox, descriptions, reviews, related products
 - **Shopping cart** — add/remove items, quantity controls, shipping calculation
+- **Wishlist** — save favorite items, heart icon toggle, dedicated wishlist page
+- **Blog** — jewelry guides, trends, and care tips
+- **My Account** — simulated profile, order history, address book
 - **User accounts** — register, login, profile management, address book, order history
 - **Search** — real-time product search with pagination
+- **Policy pages** — Terms & Conditions, Privacy Policy, Returns & Refunds, Shipping Info
 
 ### Admin Panel (Jazzmin)
 - **Dark navy sidebar** with golden accent theme matching the storefront
@@ -106,11 +110,59 @@ The golden accent (`#dcb14a`) is applied to:
   </tr>
   <tr>
     <td align="center"><b>Search Results</b></td>
-    <td align="center"><b>Shopping Cart</b></td>
+    <td align="center"><b>Checkout</b></td>
   </tr>
   <tr>
     <td><img src="docs/demo/07-search.png" width="480"></td>
+    <td><img src="docs/demo/08-checkout.png" width="480"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Shopping Cart</b></td>
+    <td align="center"><b>Contact</b></td>
+  </tr>
+  <tr>
     <td><img src="docs/demo/09-cart.png" width="480"></td>
+    <td><img src="docs/demo/14-contact.png" width="480"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>FAQ</b></td>
+    <td align="center"><b>About Us</b></td>
+  </tr>
+  <tr>
+    <td><img src="docs/demo/15-faq.png" width="480"></td>
+    <td><img src="docs/demo/16-about.png" width="480"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Terms & Conditions</b></td>
+    <td align="center"><b>Privacy Policy</b></td>
+  </tr>
+  <tr>
+    <td><img src="docs/demo/18-terms.png" width="480"></td>
+    <td><img src="docs/demo/19-privacy.png" width="480"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Returns & Refunds</b></td>
+    <td align="center"><b>Shipping Info</b></td>
+  </tr>
+  <tr>
+    <td><img src="docs/demo/20-returns.png" width="480"></td>
+    <td><img src="docs/demo/21-shipping.png" width="480"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Wishlist</b></td>
+    <td align="center"><b>Blog</b></td>
+  </tr>
+  <tr>
+    <td><img src="docs/demo/22-wishlist.png" width="480"></td>
+    <td><img src="docs/demo/23-blog.png" width="480"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>My Account</b></td>
+    <td align="center"><b>Order Placed</b></td>
+  </tr>
+  <tr>
+    <td><img src="docs/demo/24-account.png" width="480"></td>
+    <td><img src="docs/demo/17-order-placed.png" width="480"></td>
   </tr>
 </table>
 
@@ -132,6 +184,14 @@ The golden accent (`#dcb14a`) is applied to:
   <tr>
     <td><img src="docs/demo/12-admin-categories.png" width="480"></td>
     <td><img src="docs/demo/13-admin-orders.png" width="480"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Settings</b></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><img src="docs/demo/25-admin-settings.png" width="480"></td>
+    <td></td>
   </tr>
 </table>
 

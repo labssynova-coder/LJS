@@ -69,6 +69,52 @@ function updateCartUI() {
   if (badgeMobile) { badgeMobile.textContent = count; badgeMobile.style.display = count > 0 ? "inline-block" : "none"; }
 }
 
+/* ---- Wishlist (localStorage) ---- */
+function getWishlist() {
+  try {
+    var raw = localStorage.getItem("ljs_wishlist");
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) { return []; }
+}
+
+function saveWishlist(wishlist) {
+  localStorage.setItem("ljs_wishlist", JSON.stringify(wishlist));
+}
+
+function toggleWishlist(productId) {
+  productId = String(productId);
+  var wishlist = getWishlist();
+  var index = wishlist.indexOf(productId);
+  if (index > -1) {
+    wishlist.splice(index, 1);
+    _showToast("Removed from wishlist", "info");
+  } else {
+    wishlist.push(productId);
+    _showToast("Added to wishlist", "success");
+  }
+  saveWishlist(wishlist);
+  updateWishlistUI();
+}
+
+function removeFromWishlist(productId) {
+  productId = String(productId);
+  var wishlist = getWishlist();
+  var index = wishlist.indexOf(productId);
+  if (index > -1) wishlist.splice(index, 1);
+  saveWishlist(wishlist);
+  updateWishlistUI();
+  route();
+}
+
+function updateWishlistUI() {
+  var wishlist = getWishlist();
+  var count = wishlist.length;
+  var badge = document.getElementById("wishlist-badge");
+  if (badge) { badge.textContent = count; badge.style.display = count > 0 ? "inline" : "none"; }
+  var badgeMobile = document.getElementById("wishlist-badge-mobile");
+  if (badgeMobile) { badgeMobile.textContent = count; badgeMobile.style.display = count > 0 ? "inline-block" : "none"; }
+}
+
 /* ---- Price formatter ---- */
 function formatPrice(n) {
   return "$" + n.toLocaleString("en-US");
@@ -114,7 +160,7 @@ function renderProductCard(product) {
         '</a>' +
         '<div class="product-overlay">' +
           '<ul class="mb-0 list-inline">' +
-            '<li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#" onclick="event.preventDefault()">' + ICONS.heart + '</a></li>' +
+            '<li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#" onclick="event.preventDefault();toggleWishlist(' + product.id + ')">' + ICONS.heart + '</a></li>' +
             '<li class="list-inline-item m-0 p-0"><button class="btn btn-sm btn-dark" onclick="addToCart(' + product.id + ')">Add to Cart</button></li>' +
           '</ul>' +
         '</div>' +
@@ -715,6 +761,354 @@ function renderAbout() {
     '</div></section>';
 }
 
+/* ---- Terms & Conditions page ---- */
+function renderTermsConditions() {
+  var html = breadcrumb([{ label: "Terms & Conditions", href: "#/terms" }]);
+  html += '<section class="py-5"><div class="container">' +
+    '<div class="row">' +
+      '<div class="col-lg-8">' +
+        '<p class="small text-muted mb-4">Last updated: June 1, 2026</p>' +
+        '<h3 class="text-uppercase mb-4">Terms & Conditions</h3>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">1. Introduction</h5>' +
+          '<p class="text-muted">Welcome to LJS — Luxury Jewelry Shop. By accessing and using this website, you accept and agree to be bound by the terms and provisions of this agreement. If you do not agree to abide by these terms, please do not use this website.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">2. Eligibility</h5>' +
+          '<p class="text-muted">You must be at least 18 years of age to use this website. By placing an order, you represent that the products ordered will be used only in a lawful manner and in accordance with all applicable laws and regulations.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">3. Products & Pricing</h5>' +
+          '<p class="text-muted">All products are subject to availability. We make every effort to display accurate product images, descriptions, and pricing. However, we do not guarantee that product images or descriptions are entirely accurate, complete, or error-free. Prices are subject to change without prior notice.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">4. Payment Terms</h5>' +
+          '<p class="text-muted">We accept Cash on Delivery and PayPal as payment methods. All transactions are processed securely. Payment must be received in full before goods are dispatched, unless paying by Cash on Delivery.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">5. Intellectual Property</h5>' +
+          '<p class="text-muted">All content on this website, including text, graphics, logos, images, and software, is the property of LJS and is protected by international copyright laws. Unauthorized use or reproduction is strictly prohibited.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">6. Limitation of Liability</h5>' +
+          '<p class="text-muted">LJS shall not be held liable for any indirect, incidental, or consequential damages arising from the use of this website or the purchase of any products. Our total liability shall not exceed the purchase price of the product in question.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">7. Governing Law</h5>' +
+          '<p class="text-muted">These terms and conditions shall be governed by and construed in accordance with applicable local laws. Any disputes arising from these terms shall be resolved through binding arbitration.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">8. Changes to Terms</h5>' +
+          '<p class="text-muted">We reserve the right to modify these terms at any time. Changes will be effective immediately upon posting to the website. Your continued use of the website constitutes acceptance of any modifications.</p></div>' +
+      '</div>' +
+      '<div class="col-lg-4">' +
+        '<div class="bg-light p-4 mb-4">' +
+          '<h6 class="text-uppercase mb-3">Questions?</h6>' +
+          '<p class="text-small text-muted mb-1">If you have any questions about these terms, please contact us.</p>' +
+          '<a href="#/contact" class="btn btn-sm btn-dark mt-2">Contact Us</a>' +
+        '</div>' +
+        '<div class="bg-light p-4">' +
+          '<h6 class="text-uppercase mb-3">Related pages</h6>' +
+          '<ul class="list-unstyled mb-0">' +
+            '<li class="mb-2"><a href="#/privacy">Privacy Policy</a></li>' +
+            '<li class="mb-2"><a href="#/returns">Returns & Refunds</a></li>' +
+            '<li class="mb-2"><a href="#/shipping">Shipping Info</a></li>' +
+          '</ul>' +
+        '</div>' +
+      '</div>' +
+    '</div></div></section>';
+  return html;
+}
+
+/* ---- Privacy Policy page ---- */
+function renderPrivacyPolicy() {
+  var html = breadcrumb([{ label: "Privacy Policy", href: "#/privacy" }]);
+  html += '<section class="py-5"><div class="container">' +
+    '<div class="row">' +
+      '<div class="col-lg-8">' +
+        '<p class="small text-muted mb-4">Last updated: June 1, 2026</p>' +
+        '<h3 class="text-uppercase mb-4">Privacy Policy</h3>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">1. Information We Collect</h5>' +
+          '<p class="text-muted">We collect personal information that you provide when placing an order, creating an account, or contacting us. This includes your name, email address, shipping address, phone number, and payment details.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">2. How We Use Your Information</h5>' +
+          '<p class="text-muted">We use your information to process orders, provide customer support, send order confirmations and shipping updates, and improve our website experience. We will never sell your personal information to third parties.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">3. Cookies</h5>' +
+          '<p class="text-muted">Our website uses cookies to enhance your browsing experience, remember your preferences, and analyze site traffic. You may configure your browser to reject cookies, though some features may not function properly as a result.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">4. Third-Party Sharing</h5>' +
+          '<p class="text-muted">We may share your information with trusted third-party service providers who assist us in operating our website, processing payments, and delivering orders. These parties are contractually obligated to protect your data.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">5. Data Security</h5>' +
+          '<p class="text-muted">We implement industry-standard security measures to protect your personal information, including SSL encryption for all transactions and secure data storage. However, no method of internet transmission is 100% secure.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">6. Your Rights</h5>' +
+          '<p class="text-muted">You have the right to access, correct, or delete your personal information at any time. You may also opt out of marketing communications. To exercise these rights, please contact our customer service team.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">7. Contact Us</h5>' +
+          '<p class="text-muted">If you have any questions about our privacy practices, please reach out to us at <a href="#/contact">our contact page</a> or email support@ljs-jewelry.com.</p></div>' +
+      '</div>' +
+      '<div class="col-lg-4">' +
+        '<div class="bg-light p-4 mb-4">' +
+          '<h6 class="text-uppercase mb-3">Your rights</h6>' +
+          '<ul class="list-unstyled mb-0 text-small text-muted">' +
+            '<li class="mb-2">&#10003; Access your data</li>' +
+            '<li class="mb-2">&#10003; Request correction</li>' +
+            '<li class="mb-2">&#10003; Delete your account</li>' +
+            '<li class="mb-2">&#10003; Opt out of marketing</li>' +
+          '</ul>' +
+        '</div>' +
+        '<div class="bg-light p-4">' +
+          '<h6 class="text-uppercase mb-3">Related pages</h6>' +
+          '<ul class="list-unstyled mb-0">' +
+            '<li class="mb-2"><a href="#/terms">Terms & Conditions</a></li>' +
+            '<li class="mb-2"><a href="#/returns">Returns & Refunds</a></li>' +
+          '</ul>' +
+        '</div>' +
+      '</div>' +
+    '</div></div></section>';
+  return html;
+}
+
+/* ---- Returns & Refunds page ---- */
+function renderReturnsRefunds() {
+  var html = breadcrumb([{ label: "Returns & Refunds", href: "#/returns" }]);
+  html += '<section class="py-5"><div class="container">' +
+    '<div class="row">' +
+      '<div class="col-lg-8">' +
+        '<h3 class="text-uppercase mb-4">Returns & Refunds Policy</h3>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">30-Day Return Window</h5>' +
+          '<p class="text-muted">We offer a 30-day return window on all items from the date of delivery. Items must be returned in their original condition with all tags attached and original packaging intact.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">Eligibility Conditions</h5>' +
+          '<p class="text-muted">To be eligible for a return, your item must be unused and in the same condition that you received it. It must also be in the original packaging. Custom or personalized jewelry, earrings for hygiene reasons, and gift cards are non-returnable.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">How to Initiate a Return</h5>' +
+          '<p class="text-muted">To start a return, contact our customer service team via our <a href="#/contact">contact page</a> or email support@ljs-jewelry.com with your order number. We will provide you with a return shipping label and instructions.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">Refund Process</h5>' +
+          '<p class="text-muted">Once your return is received and inspected, we will notify you of the approval or rejection. If approved, your refund will be processed to your original method of payment within 5–7 business days.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">Exchanges</h5>' +
+          '<p class="text-muted">If you need to exchange an item for a different size or style, contact us within 30 days of delivery. We will arrange the exchange once we receive the original item back.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">Damaged or Defective Items</h5>' +
+          '<p class="text-muted">If you receive a damaged or defective item, please contact us immediately with photos of the damage. We will arrange a replacement or full refund at no additional cost to you.</p></div>' +
+      '</div>' +
+      '<div class="col-lg-4">' +
+        '<div class="bg-light p-4 mb-4">' +
+          '<h6 class="text-uppercase mb-3">Key details</h6>' +
+          '<div class="d-flex justify-content-between mb-2"><span class="text-muted">Return window</span><strong>30 days</strong></div>' +
+          '<div class="d-flex justify-content-between mb-2"><span class="text-muted">Refund timeline</span><strong>5–7 business days</strong></div>' +
+          '<div class="d-flex justify-content-between mb-2"><span class="text-muted">Return shipping</span><strong>Free for defects</strong></div>' +
+          '<hr>' +
+          '<p class="text-small text-muted mb-2"><strong>Email:</strong> support@ljs-jewelry.com</p>' +
+          '<p class="text-small text-muted mb-0"><strong>Phone:</strong> +1 (555) 123-4567</p>' +
+        '</div>' +
+        '<div class="bg-light p-4 mb-4">' +
+          '<h6 class="text-uppercase mb-3">Non-returnable items</h6>' +
+          '<ul class="list-unstyled mb-0 text-small text-muted">' +
+            '<li class="mb-2">&times; Custom/personalized jewelry</li>' +
+            '<li class="mb-2">&times; Earrings (hygiene)</li>' +
+            '<li class="mb-0">&times; Gift cards</li>' +
+          '</ul>' +
+        '</div>' +
+        '<a href="#/contact" class="btn btn-dark btn-block">Contact Support</a>' +
+      '</div>' +
+    '</div></div></section>';
+  return html;
+}
+
+/* ---- Shipping Info page ---- */
+function renderShippingInfo() {
+  var html = breadcrumb([{ label: "Shipping Information", href: "#/shipping" }]);
+  html += '<section class="py-5"><div class="container">' +
+    '<div class="row">' +
+      '<div class="col-lg-8">' +
+        '<h3 class="text-uppercase mb-4">Shipping Information</h3>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-3">Shipping Methods</h5>' +
+          '<table class="table table-bordered">' +
+            '<thead class="bg-dark text-white"><tr><th>Method</th><th>Delivery Time</th><th>Cost</th></tr></thead>' +
+            '<tbody>' +
+              '<tr><td>Standard Shipping</td><td>5–7 business days</td><td>Free</td></tr>' +
+              '<tr><td>Express Shipping</td><td>2–3 business days</td><td>' + formatPrice(15) + '</td></tr>' +
+              '<tr><td>Overnight Shipping</td><td>1 business day</td><td>' + formatPrice(30) + '</td></tr>' +
+            '</tbody>' +
+          '</table>' +
+        '</div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">International Shipping</h5>' +
+          '<p class="text-muted">We ship to most countries worldwide. International shipping times and costs vary by destination. Standard international delivery takes 10–15 business days. Express international delivery takes 5–7 business days. Customs duties and import taxes are the responsibility of the recipient.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">Order Processing</h5>' +
+          '<p class="text-muted">Orders placed before 2:00 PM EST on business days are processed the same day. Orders placed after 2:00 PM or on weekends/holidays will be processed the next business day.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">Tracking Your Order</h5>' +
+          '<p class="text-muted">Once your order ships, you will receive a confirmation email with a tracking number. You can use this number to track your package on the carrier\'s website. Track your order from your <a href="#/account">account page</a>.</p></div>' +
+        '<div class="mb-4"><h5 class="text-uppercase mb-2">Shipping Restrictions</h5>' +
+          '<p class="text-muted">Some items may have shipping restrictions due to value or size. High-value items (over ' + formatPrice(1000) + ') require a signature upon delivery. We cannot ship to P.O. boxes for express or overnight orders.</p></div>' +
+      '</div>' +
+      '<div class="col-lg-4">' +
+        '<div class="bg-light p-4 mb-4 text-center">' +
+          ICONS.delivery +
+          '<h6 class="text-uppercase mt-3 mb-3">Quick facts</h6>' +
+          '<p class="text-small text-muted mb-2">Free standard shipping on all orders</p>' +
+          '<p class="text-small text-muted mb-2">Same-day processing before 2 PM EST</p>' +
+          '<p class="text-small text-muted mb-0">Tracking included on all orders</p>' +
+        '</div>' +
+        '<div class="bg-light p-4">' +
+          '<h6 class="text-uppercase mb-3">Related pages</h6>' +
+          '<ul class="list-unstyled mb-0">' +
+            '<li class="mb-2"><a href="#/returns">Returns & Refunds</a></li>' +
+            '<li class="mb-2"><a href="#/contact">Contact Us</a></li>' +
+            '<li class="mb-2"><a href="#/faq">FAQs</a></li>' +
+          '</ul>' +
+        '</div>' +
+      '</div>' +
+    '</div></div></section>';
+  return html;
+}
+
+/* ---- Wishlist page ---- */
+function renderWishlist() {
+  var products = window._products || [];
+  var wishlist = getWishlist();
+  var ids = wishlist;
+
+  var html = breadcrumb([{ label: "Wishlist", href: "#/wishlist" }]);
+
+  if (ids.length === 0) {
+    html += '<section class="py-5"><div class="container text-center">' +
+      '<h2 class="mb-3">Your wishlist is empty</h2>' +
+      '<p class="text-muted mb-4">Save your favorite pieces by clicking the heart icon on any product.</p>' +
+      '<a href="#/shop" class="btn btn-dark">Browse Products</a>' +
+    '</div></section>';
+    return html;
+  }
+
+  html += '<section class="py-5"><div class="container">' +
+    '<div class="d-flex align-items-center mb-4">' +
+      '<h3 class="text-uppercase mb-0">Your Wishlist</h3>' +
+      '<span class="ml-3 badge badge-pill bg-dark text-white">' + ids.length + ' item' + (ids.length !== 1 ? 's' : '') + '</span>' +
+    '</div>' +
+    '<div class="row">';
+
+  ids.forEach(function (id) {
+    var p = products.find(function (pr) { return String(pr.id) === id; });
+    if (!p) return;
+    html += '<div class="col-xl-3 col-lg-4 col-sm-6">' +
+      '<div class="product text-center">' +
+        '<div class="position-relative mb-3">' +
+          '<a class="d-block" href="#/product/' + p.slug + '">' +
+            '<img class="img-fluid w-100" src="' + p.image + '" alt="' + p.title + '" loading="lazy">' +
+          '</a>' +
+          '<div class="product-overlay">' +
+            '<ul class="mb-0 list-inline">' +
+              '<li class="list-inline-item m-0 p-0"><button class="btn btn-sm btn-dark" onclick="addToCart(' + p.id + ')">Add to Cart</button></li>' +
+              '<li class="list-inline-item m-0 p-0"><button class="btn btn-sm btn-outline-dark" onclick="removeFromWishlist(' + p.id + ')">' + ICONS.close + '</button></li>' +
+            '</ul>' +
+          '</div>' +
+        '</div>' +
+        '<h6><a class="reset-anchor" href="#/product/' + p.slug + '">' + p.title + '</a></h6>' +
+        '<p class="small text-muted">' + formatPrice(p.price) + '</p>' +
+      '</div>' +
+    '</div>';
+  });
+
+  html += '</div></div></section>';
+  return html;
+}
+
+/* ---- Blog page ---- */
+function renderBlog() {
+  var posts = [
+    {
+      title: "The Art of Choosing the Perfect Engagement Ring",
+      category: "Guides",
+      date: "May 28, 2026",
+      image: "assets/images/hero/hero.jpg",
+      excerpt: "Selecting an engagement ring is one of the most meaningful purchases you will ever make. From understanding the 4 Cs of diamond quality to choosing the right metal and setting, our comprehensive guide walks you through every consideration to find a ring as unique as your love story."
+    },
+    {
+      title: "2026 Jewelry Trends: What's Hot This Season",
+      category: "Trends",
+      date: "May 15, 2026",
+      image: "assets/images/hero/banner.jpg",
+      excerpt: "This year's jewelry scene is all about bold individuality. Layered gold necklaces, oversized hoop earrings, and colorful gemstone rings are dominating runways and street style alike. Discover the key pieces to elevate your collection this season."
+    },
+    {
+      title: "Caring for Your Gold Jewelry: Expert Tips",
+      category: "Care",
+      date: "April 30, 2026",
+      image: "assets/images/hero/shop-hero.jpg",
+      excerpt: "Gold jewelry is an investment that can last generations with proper care. Learn how to clean, store, and protect your precious pieces — from daily maintenance routines to professional servicing schedules that keep your jewelry looking brand new."
+    }
+  ];
+
+  var html = breadcrumb([{ label: "Blog", href: "#/blog" }]);
+  html += '<section class="py-5"><div class="container">' +
+    '<h3 class="text-uppercase mb-4">From the Blog</h3>' +
+    '<div class="row">';
+
+  posts.forEach(function (post) {
+    html += '<div class="col-lg-4 mb-4">' +
+      '<div class="card border-0 shadow-sm h-100">' +
+        '<img class="card-img-top" src="' + post.image + '" alt="' + post.title + '" style="height:200px;object-fit:cover;">' +
+        '<div class="card-body">' +
+          '<span class="small text-uppercase font-weight-bold" style="color:var(--gold);">' + post.category + '</span>' +
+          '<h5 class="text-uppercase mt-2 mb-2">' + post.title + '</h5>' +
+          '<p class="text-muted text-small mb-3">' + post.excerpt + '</p>' +
+          '<p class="text-small text-muted mb-0">' + post.date + '</p>' +
+        '</div>' +
+        '<div class="card-footer border-0 bg-white pb-3">' +
+          '<a href="#" class="btn btn-sm btn-outline-dark" onclick="event.preventDefault();_showToast(\'Demo mode — blog articles are simulated\',\'info\')">Read More</a>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  });
+
+  html += '</div></div></section>';
+  return html;
+}
+
+/* ---- My Account page ---- */
+function renderAccount() {
+  var html = breadcrumb([{ label: "My Account", href: "#/account" }]);
+  html += '<section class="py-5"><div class="container">' +
+    '<div class="alert alert-info mb-4"><small>You are viewing a simulated account in demo mode. Changes will not persist.</small></div>' +
+    '<div class="row">' +
+      '<div class="col-lg-8">' +
+        /* Profile card */
+        '<div class="bg-light p-4 mb-4">' +
+          '<div class="d-flex align-items-center mb-3">' +
+            '<div class="mr-3" style="width:64px;height:64px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;">' +
+              '<svg width="28" height="28" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="1"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' +
+            '</div>' +
+            '<div>' +
+              '<h5 class="mb-1">Alexandra Sterling</h5>' +
+              '<p class="text-muted mb-0 small">alexandra@example.com</p>' +
+              '<p class="text-muted mb-0 small">Member since January 2024</p>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        /* Order history */
+        '<div class="bg-light p-4 mb-4">' +
+          '<h5 class="text-uppercase mb-3">Recent Orders</h5>' +
+          '<div class="d-none d-md-flex py-2 border-bottom font-weight-bold small text-uppercase">' +
+            '<div class="col-md-2">Order</div><div class="col-md-3">Date</div><div class="col-md-3">Status</div><div class="col-md-2">Total</div><div class="col-md-2"></div>' +
+          '</div>' +
+          '<div class="d-flex align-items-center py-3 border-bottom">' +
+            '<div class="col-md-2"><strong>#47</strong></div><div class="col-md-3"><span class="text-muted small">Jun 2, 2026</span></div><div class="col-md-3"><span class="badge badge-pending">Pending</span></div><div class="col-md-2">' + formatPrice(1299) + '</div><div class="col-md-2"><a href="#" class="small" onclick="event.preventDefault();_showToast(\'Demo mode\',\'info\')">View</a></div>' +
+          '</div>' +
+          '<div class="d-flex align-items-center py-3 border-bottom">' +
+            '<div class="col-md-2"><strong>#39</strong></div><div class="col-md-3"><span class="text-muted small">Apr 15, 2026</span></div><div class="col-md-3"><span class="badge badge-delivered">Delivered</span></div><div class="col-md-2">' + formatPrice(780) + '</div><div class="col-md-2"><a href="#" class="small" onclick="event.preventDefault();_showToast(\'Demo mode\',\'info\')">View</a></div>' +
+          '</div>' +
+          '<div class="d-flex align-items-center py-3">' +
+            '<div class="col-md-2"><strong>#28</strong></div><div class="col-md-3"><span class="text-muted small">Feb 8, 2026</span></div><div class="col-md-3"><span class="badge badge-delivered">Delivered</span></div><div class="col-md-2">' + formatPrice(1999) + '</div><div class="col-md-2"><a href="#" class="small" onclick="event.preventDefault();_showToast(\'Demo mode\',\'info\')">View</a></div>' +
+          '</div>' +
+        '</div>' +
+        /* Address book */
+        '<div class="bg-light p-4">' +
+          '<h5 class="text-uppercase mb-3">Saved Address</h5>' +
+          '<div class="border p-3">' +
+            '<p class="mb-1"><strong>Home</strong></p>' +
+            '<p class="text-muted small mb-0">742 Evergreen Terrace<br>Springfield, IL 62704<br>United States</p>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="col-lg-4">' +
+        '<div class="bg-light p-4 mb-4">' +
+          '<h6 class="text-uppercase mb-3">Account actions</h6>' +
+          '<a href="#" class="btn btn-outline-dark btn-block btn-sm mb-2" onclick="event.preventDefault();_showToast(\'Demo mode — profile editing is simulated\',\'info\')">Edit Profile</a>' +
+          '<a href="#" class="btn btn-outline-dark btn-block btn-sm mb-2" onclick="event.preventDefault();_showToast(\'Demo mode — password change is simulated\',\'info\')">Change Password</a>' +
+          '<a href="#/wishlist" class="btn btn-outline-dark btn-block btn-sm mb-2">View Wishlist</a>' +
+          '<a href="#/orders" class="btn btn-outline-dark btn-block btn-sm mb-2" onclick="event.preventDefault();_showToast(\'Demo mode — view orders in admin panel\',\'info\')">Order History</a>' +
+          '<hr>' +
+          '<a href="#/login" class="btn btn-dark btn-block btn-sm">Sign Out</a>' +
+        '</div>' +
+        '<div class="bg-light p-4">' +
+          '<h6 class="text-uppercase mb-3">Need help?</h6>' +
+          '<p class="text-small text-muted mb-2">Visit our FAQ or contact support.</p>' +
+          '<a href="#/faq" class="btn btn-sm btn-outline-dark btn-block mb-2">FAQs</a>' +
+          '<a href="#/contact" class="btn btn-sm btn-outline-dark btn-block">Contact Us</a>' +
+        '</div>' +
+      '</div>' +
+    '</div></div></section>';
+  return html;
+}
+
 /* ---- Cart drawer ---- */
 function renderCartDrawer() {
   var products = window._products || [];
@@ -832,6 +1226,27 @@ function route() {
   } else if (path === "/about") {
     document.title = "About | LJS";
     app.innerHTML = renderAbout();
+  } else if (path === "/terms") {
+    document.title = "Terms & Conditions | LJS";
+    app.innerHTML = renderTermsConditions();
+  } else if (path === "/privacy") {
+    document.title = "Privacy Policy | LJS";
+    app.innerHTML = renderPrivacyPolicy();
+  } else if (path === "/returns") {
+    document.title = "Returns & Refunds | LJS";
+    app.innerHTML = renderReturnsRefunds();
+  } else if (path === "/shipping") {
+    document.title = "Shipping Information | LJS";
+    app.innerHTML = renderShippingInfo();
+  } else if (path === "/wishlist") {
+    document.title = "Wishlist | LJS";
+    app.innerHTML = renderWishlist();
+  } else if (path === "/blog") {
+    document.title = "Blog | LJS";
+    app.innerHTML = renderBlog();
+  } else if (path === "/account") {
+    document.title = "My Account | LJS";
+    app.innerHTML = renderAccount();
   } else {
     document.title = "Page Not Found | LJS";
     app.innerHTML = '<section class="py-5"><div class="container text-center">' +
@@ -915,6 +1330,7 @@ async function initApp() {
 
     /* Update cart badge */
     updateCartUI();
+    updateWishlistUI();
 
     /* Route */
     route();

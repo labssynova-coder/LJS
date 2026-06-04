@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="LJS Admin Panel - Luxury Jewelry Shop Administration">
   <title>LJS Admin</title>
-  <link rel="stylesheet" href="admin.css?v=12">
+  <link rel="stylesheet" href="admin.css?v=14">
 </head>
 <body>
 
@@ -76,7 +76,7 @@
         </a>
 
         <div class="nav-section-title">System</div>
-        <a href="#/" class="nav-link" onclick="showToast('Site settings are available in the full admin', 'info'); closeSidebar();">
+        <a href="#/settings" class="nav-link" data-route="#/settings" onclick="closeSidebar()">
           <span class="nav-icon">&#x2699;&#xFE0F;</span>
           <span class="nav-label">Settings</span>
         </a>
@@ -112,7 +112,7 @@
   <div id="toast-container"></div>
 
   <!-- App Script -->
-  <script src="admin.js?v=12"></script>
+  <script src="admin.js?v=14"></script>
 
 </body>
 </html>

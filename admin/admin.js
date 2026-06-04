@@ -344,7 +344,8 @@ function handleRoute() {
     '#/': 'Dashboard',
     '#/products': 'Products',
     '#/categories': 'Categories',
-    '#/orders': 'Orders'
+    '#/orders': 'Orders',
+    '#/settings': 'Settings'
   };
 
   if (pageTitle) {
@@ -364,6 +365,9 @@ function handleRoute() {
       break;
     case '#/orders':
       renderOrders();
+      break;
+    case '#/settings':
+      renderSettings();
       break;
     default:
       renderDashboard();
@@ -706,6 +710,112 @@ function renderOrders() {
 
     content.innerHTML = html;
   });
+}
+
+
+// ---- Render Settings ----
+function renderSettings() {
+  var content = document.getElementById('app-content');
+  if (!content) return;
+
+  var html = '';
+
+  // Page header
+  html += '<div class="page-header">';
+  html += '  <h1>Settings</h1>';
+  html += '  <p>Configure your store preferences</p>';
+  html += '</div>';
+
+  // Demo notice
+  html += '<div class="content-card mb-4">';
+  html += '  <div class="card-body">';
+  html += '    <div style="background:#fff8e1;border-left:4px solid #dcb14a;padding:12px 16px;border-radius:4px;">';
+  html += '      <strong>&#9888;&#65039; Demo Mode</strong> — Settings are display-only. Changes will not persist.';
+  html += '    </div>';
+  html += '  </div>';
+  html += '</div>';
+
+  // Store Settings
+  html += '<div class="content-card mb-4">';
+  html += '  <div class="card-header">';
+  html += '    <h2>Store Settings</h2>';
+  html += '  </div>';
+  html += '  <div class="card-body">';
+
+  html += '    <div class="form-group">';
+  html += '      <label>Store Name</label>';
+  html += '      <input type="text" class="form-input" value="LJS Jewelry Shop" readonly>';
+  html += '    </div>';
+
+  html += '    <div class="form-group">';
+  html += '      <label>Tagline</label>';
+  html += '      <input type="text" class="form-input" value="Luxury Jewelry &amp; Timepieces" readonly>';
+  html += '    </div>';
+
+  html += '    <div class="form-group">';
+  html += '      <label>Currency</label>';
+  html += '      <select class="form-input" disabled>';
+  html += '        <option selected>USD ($)</option>';
+  html += '        <option>EUR (&euro;)</option>';
+  html += '        <option>GBP (&pound;)</option>';
+  html += '      </select>';
+  html += '    </div>';
+
+  html += '  </div>';
+  html += '</div>';
+
+  // Notification Settings
+  html += '<div class="content-card mb-4">';
+  html += '  <div class="card-header">';
+  html += '    <h2>Notifications</h2>';
+  html += '  </div>';
+  html += '  <div class="card-body">';
+
+  html += '    <div class="setting-row" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #eee;">';
+  html += '      <div>';
+  html += '        <div style="font-weight:600;">Email Notifications</div>';
+  html += '        <div style="font-size:0.85rem;color:#666;">Receive order and customer notifications via email</div>';
+  html += '      </div>';
+  html += '      <label class="toggle" style="position:relative;display:inline-block;width:44px;height:24px;">';
+  html += '        <input type="checkbox" checked disabled style="opacity:0;width:0;height:0;">';
+  html += '        <span style="position:absolute;cursor:not-allowed;top:0;left:0;right:0;bottom:0;background:#dcb14a;border-radius:24px;transition:0.3s;"></span>';
+  html += '        <span style="position:absolute;content:\'\';height:18px;width:18px;left:22px;bottom:3px;background:white;border-radius:50%;transition:0.3s;"></span>';
+  html += '      </label>';
+  html += '    </div>';
+
+  html += '    <div class="setting-row" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #eee;">';
+  html += '      <div>';
+  html += '        <div style="font-weight:600;">Order Alerts</div>';
+  html += '        <div style="font-size:0.85rem;color:#666;">Get notified when new orders are placed</div>';
+  html += '      </div>';
+  html += '      <label class="toggle" style="position:relative;display:inline-block;width:44px;height:24px;">';
+  html += '        <input type="checkbox" checked disabled style="opacity:0;width:0;height:0;">';
+  html += '        <span style="position:absolute;cursor:not-allowed;top:0;left:0;right:0;bottom:0;background:#dcb14a;border-radius:24px;transition:0.3s;"></span>';
+  html += '        <span style="position:absolute;content:\'\';height:18px;width:18px;left:22px;bottom:3px;background:white;border-radius:50%;transition:0.3s;"></span>';
+  html += '      </label>';
+  html += '    </div>';
+
+  html += '    <div class="setting-row" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">';
+  html += '      <div>';
+  html += '        <div style="font-weight:600;">Low Stock Alerts</div>';
+  html += '        <div style="font-size:0.85rem;color:#666;">Get warned when product inventory is low</div>';
+  html += '      </div>';
+  html += '      <label class="toggle" style="position:relative;display:inline-block;width:44px;height:24px;">';
+  html += '        <input type="checkbox" disabled style="opacity:0;width:0;height:0;">';
+  html += '        <span style="position:absolute;cursor:not-allowed;top:0;left:0;right:0;bottom:0;background:#ccc;border-radius:24px;transition:0.3s;"></span>';
+  html += '        <span style="position:absolute;content:\'\';height:18px;width:18px;left:4px;bottom:3px;background:white;border-radius:50%;transition:0.3s;"></span>';
+  html += '      </label>';
+  html += '    </div>';
+
+  html += '  </div>';
+  html += '</div>';
+
+  // Save button
+  html += '<div style="text-align:right;">';
+  html += '  <button class="btn btn-gold" onclick="showToast(\'Settings saved (simulated in demo mode)\', \'success\')">Save Settings</button>';
+  html += '</div>';
+
+  content.innerHTML = html;
 }
 
 
