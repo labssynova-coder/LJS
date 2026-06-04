@@ -196,8 +196,8 @@ function renderHomepage(products) {
   '</header><div class="row">';
 
   categories.forEach(function (cat) {
-    catHTML += '<div class="col-md-4 mb-4 mb-md-0">' +
-      '<a class="category-item" href="#/categories">' +
+    catHTML += '<div class="col-lg-3 col-md-4 col-sm-6 mb-4">' +
+      '<a class="category-item" href="#/shop?category=' + cat.slug + '">' +
         '<img class="img-fluid" src="' + cat.image + '" alt="' + cat.title + '">' +
         '<strong class="category-item-title">' + cat.title + '</strong>' +
       '</a>' +
